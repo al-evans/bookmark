@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>App Icon Previews</title>
+<style>
+  :root {
+    --blue: #1d4ed8;
+    --black: #0f172a;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-600: #475569;
+    --white: #ffffff;
+  }
+  body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--gray-100);
+    color: var(--black);
+    margin: 0;
+    padding: 2rem 1rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1 {
+    text-align: center;
+    margin: 0 0 0.25rem;
+    font-size: 1.5rem;
+  }
+  .sub {
+    text-align: center;
+    color: var(--gray-600);
+    margin-bottom: 2rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .card h2 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    color: var(--gray-600);
+    font-weight: 600;
+  }
+  .sizes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .size {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--gray-600);
+    font-size: 0.75rem;
+  }
+  .size img { display: block; }
+  .home-row {
+    margin-top: 1.25rem;
+    background: var(--black);
+    border-radius: 14px;
+    padding: 0.75rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    align-items: end;
+  }
+  .home-row .app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--white);
+    font-size: 0.7rem;
+  }
+  .home-row img { border-radius: 14px; }
+</style>
+</head>
+<body>
+  <h1>App Icon Options</h1>
+  <p class="sub">Using the app palette: <code>#0f172a</code> · <code>#1d4ed8</code> · <code>#1e40af</code> · <code>#eff6ff</code></p>
+  <div class="grid">
+    <!-- Option 1 -->
+    <div class="card">
+      <h2>Option 1 · Bookmark + Star</h2>
+      <div class="sizes">
+        <div class="size"><img src="./icons/bookmark-star.svg" width="180" height="180" alt="" /><span>180px</span></div>
+        <div class="size"><img src="./icons/bookmark-star.svg" width="96" height="96" alt="" /><span>96px</span></div>
+        <div class="size"><img src="./icons/bookmark-star.svg" width="48" height="48" alt="" /><span>48px</span></div>
+      </div>
+      <div class="home-row">
+        <div class="app"><img src="./icons/bookmark-star.svg" width="60" height="60" alt="" /><span>Reading</span></div>
+        <div class="app"><img src="./icons/bookmark-star.svg" width="60" height="60" alt="" /><span>Reading</span></div>
+      </div>
+    </div>
+
+    <!-- Option 2 -->
+    <div class="card">
+      <h2>Option 2 · Open Book</h2>
+      <div class="sizes">
+        <div class="size"><img src="./icons/open-book.svg" width="180" height="180" alt="" /><span>180px</span></div>
+        <div class="size"><img src="./icons/open-book.svg" width="96" height="96" alt="" /><span>96px</span></div>
+        <div class="size"><img src="./icons/open-book.svg" width="48" height="48" alt="" /><span>48px</span></div>
+      </div>
+      <div class="home-row">
+        <div class="app"><img src="./icons/open-book.svg" width="60" height="60" alt="" /><span>Reading</span></div>
+        <div class="app"><img src="./icons/open-book.svg" width="60" height="60" alt="" /><span>Reading</span></div>
+      </div>
+    </div>
+
+    <!-- Option 3 -->
+    <div class="card">
+      <h2>Option 3 · Progress Circle</h2>
+      <div class="sizes">
+        <div class="size"><img src="./icons/progress-circle.svg" width="180" height="180" alt="" /><span>180px</span></div>
+        <div class="size"><img src="./icons/progress-circle.svg" width="96" height="96" alt="" /><span>96px</span></div>
+        <div class="size"><img src="./icons/progress-circle.svg" width="48" height="48" alt="" /><span>48px</span></div>
+      </div>
+      <div class="home-row">
+        <div class="app"><img src="./icons/progress-circle.svg" width="60" height="60" alt="" /><span>Reading</span></div>
+        <div class="app"><img src="./icons/progress-circle.svg" width="60" height="60" alt="" /><span>Reading</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

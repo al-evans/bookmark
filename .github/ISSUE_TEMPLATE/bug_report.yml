@@ -1,0 +1,71 @@
+name: Bug report
+description: Something isn't working the way it should
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please **do not** paste API keys, tokens, or
+        `.env` contents into this issue. Security issues should go through
+        [Security Advisories](https://github.com/al-evans/bookmark/security/advisories/new)
+        instead.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to '...'
+        2. Click '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Where are you running it?
+      options:
+        - Local dev (npm run dev)
+        - Vercel deployment
+        - Both
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ai-provider
+    attributes:
+      label: AI provider
+      description: Which value of AI_PROVIDER are you using?
+      options:
+        - google (default)
+        - openai
+        - anthropic
+        - Not configured / not relevant
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or console output
+      description: Redact any secrets before pasting.
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: "Safari 18 on iOS 18.2"
+    validations:
+      required: false

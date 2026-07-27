@@ -1,0 +1,7 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Reading Goals app icon</title>
+  <desc id="desc">A navy bookmark with a cutout star on a light-blue tinted background.</desc>
+  <rect width="192" height="192" rx="40" fill="#eff6ff"/>
+  <path d="M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z" fill="#0f172a"/>
+  <polygon points="96,68 102.7,82 118,84 107,94.5 109.7,109.7 96,102.5 82.3,109.7 85,94.5 74,84 89.3,82" fill="#eff6ff"/>
+</svg>

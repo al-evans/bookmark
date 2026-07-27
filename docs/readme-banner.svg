@@ -1,0 +1,35 @@
+<svg width="1600" height="480" viewBox="0 0 1600 480" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Reading Tracker App banner</title>
+  <desc id="desc">A banner for the Reading Tracker App README featuring the app icon, app name, and a short product summary.</desc>
+  <defs>
+    <linearGradient id="bg" x1="82" y1="36" x2="1458" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <filter id="shadow" x="104" y="72" width="336" height="336" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0901961 0 0 0 0 0.211765 0 0 0 0 0.478431 0 0 0 0.16 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/>
+    </filter>
+    <clipPath id="iconClip">
+      <rect x="152" y="96" width="240" height="240" rx="56"/>
+    </clipPath>
+  </defs>
+  <rect width="1600" height="480" rx="36" fill="url(#bg)"/>
+  <g filter="url(#shadow)">
+    <g clip-path="url(#iconClip)">
+      <rect x="152" y="96" width="240" height="240" rx="56" fill="#eff6ff"/>
+      <g transform="translate(152 96) scale(1.25)">
+        <path d="M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z" fill="#0f172a"/>
+        <polygon points="96,68 102.7,82 118,84 107,94.5 109.7,109.7 96,102.5 82.3,109.7 85,94.5 74,84 89.3,82" fill="#eff6ff"/>
+      </g>
+    </g>
+  </g>
+  <text x="464" y="194" fill="#F1F5F9" font-size="76" font-family="Segoe UI, Arial, sans-serif" font-weight="700">Reading Tracker App</text>
+  <text x="464" y="250" fill="#93C5FD" font-size="28" font-family="Segoe UI, Arial, sans-serif" font-weight="700">Track books, reading progress, and finished stats</text>
+  <text x="464" y="306" fill="#CBD5E1" font-size="28" font-family="Segoe UI, Arial, sans-serif">React + Vite reading tracker with sync, reminders, and AI-powered helpers.</text>
+</svg>

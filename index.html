@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('reading-app-theme');
+          var theme = stored;
+          if (theme !== 'light' && theme !== 'dark') {
+            theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260520-27" data-favicon-key="favicon-32" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=20260520-27" data-favicon-key="icon-192" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=20260520-27" data-favicon-key="icon-512" />
+    <link rel="shortcut icon" href="/favicon.ico?v=20260520-27" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-rg-20260520-8.png" data-favicon-key="apple-touch-icon" />
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/apple-touch-icon-rg-20260520-8-precomposed.png" data-favicon-key="apple-touch-icon-precomposed" />
+    <link rel="manifest" href="/manifest.json?v=20260520-27" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Reading Goals" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Reading Goals</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
