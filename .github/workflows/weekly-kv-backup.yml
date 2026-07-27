@@ -1,0 +1,105 @@
+name: Weekly Vercel KV Backup
+
+on:
+  schedule:
+    # Sunday backup in UTC (12 AM PT in PST, 1 AM PT in PDT).
+    - cron: '0 8 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  backup-reading-list:
+    # Opt-in only. This workflow commits your reading history into the repo, so
+    # it stays off until you explicitly set the ENABLE_KV_BACKUP repository
+    # variable to "true". Do not enable it on a public repo unless you are
+    # comfortable publishing your reading list.
+    if: vars.ENABLE_KV_BACKUP == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Guard for Sunday midnight PT
+        id: guard
+        env:
+          KV_REST_API_URL: ${{ secrets.KV_REST_API_URL || secrets.VERCEL_KV_REST_API_URL }}
+          KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN || secrets.VERCEL_KV_REST_API_TOKEN }}
+        run: |
+          if [ -z "$KV_REST_API_URL" ] || [ -z "$KV_REST_API_TOKEN" ]; then
+            echo "::warning::KV secrets are not configured. Set KV_REST_API_URL/KV_REST_API_TOKEN or VERCEL_KV_REST_API_URL/VERCEL_KV_REST_API_TOKEN. Skipping backup."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Download books snapshot from Vercel KV
+        if: steps.guard.outputs.skip == 'false'
+        env:
+          KV_REST_API_URL: ${{ secrets.KV_REST_API_URL || secrets.VERCEL_KV_REST_API_URL }}
+          KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN || secrets.VERCEL_KV_REST_API_TOKEN }}
+          BOOKS_KV_KEY: ${{ secrets.BOOKS_KV_KEY }}
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const url = process.env.KV_REST_API_URL;
+          const token = process.env.KV_REST_API_TOKEN;
+          const key = process.env.BOOKS_KV_KEY || 'reading-app:books';
+
+          if (!url || !token) {
+            throw new Error('Missing KV_REST_API_URL or KV_REST_API_TOKEN secret.');
+          }
+
+          async function main() {
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(['GET', key]),
+            });
+
+            if (!response.ok) {
+              const text = await response.text();
+              throw new Error(`KV request failed (${response.status}): ${text}`);
+            }
+
+            const data = await response.json();
+            const books = data?.result ? JSON.parse(data.result) : [];
+            const now = new Date();
+            const stamp = now.toISOString().replace(/[:.]/g, '-');
+            const dir = path.join('backups', 'reading-list');
+            fs.mkdirSync(dir, { recursive: true });
+
+            const filePath = path.join(dir, `reading-list-${stamp}.json`);
+            fs.writeFileSync(filePath, `${JSON.stringify({ exportedAt: now.toISOString(), books }, null, 2)}\n`);
+
+            fs.writeFileSync(process.env.GITHUB_OUTPUT, `backup_path=${filePath}\n`, { flag: 'a' });
+          }
+
+          main().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
+
+      - name: Commit backup
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backups/reading-list/*.json
+          git commit -m "chore: weekly reading list backup" || echo "No changes to commit"
+          git push
