@@ -1,0 +1,25 @@
+version: 2
+
+updates:
+  # Application dependencies.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for routine bumps rather than one per package. Majors are
+      # left ungrouped so they get reviewed on their own.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # Keeps the actions pinned in ci.yml from going stale.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
