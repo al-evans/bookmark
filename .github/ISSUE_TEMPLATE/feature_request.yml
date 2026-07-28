@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an idea for the reading tracker
+description: Suggest an idea for Bookmark
 labels: ["enhancement"]
 body:
   - type: markdown

@@ -1,6 +1,6 @@
-# Reading Tracker App
+# Bookmark
 
-![Reading Tracker App banner](docs/readme-banner.svg)
+![Bookmark banner](docs/readme-banner.svg)
 
 A self-hosted book reading tracker built with React + Vite, deployed on Vercel.
 Log what you're reading, track daily progress, get a lock-screen reminder when

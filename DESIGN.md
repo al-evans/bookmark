@@ -9,10 +9,10 @@ typography:
 spacing:
   base: "8px"
 ---
-# Reading App Design System
+# Bookmark Design System
 
 ## Intent
-The Reading App design should feel calm, focused, and distraction-free to encourage reading.
+The Bookmark design should feel calm, focused, and distraction-free to encourage reading.
 
 ## Colors
 - **Primary:** Use `#4F46E5` for primary buttons and progress bars.

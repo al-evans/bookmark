@@ -1,6 +1,6 @@
 <svg width="1600" height="480" viewBox="0 0 1600 480" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">Reading Tracker App banner</title>
-  <desc id="desc">A banner for the Reading Tracker App README featuring the app icon, app name, and a short product summary.</desc>
+  <title id="title">Bookmark banner</title>
+  <desc id="desc">A banner for the Bookmark README featuring the app icon, app name, and a short product summary.</desc>
   <defs>
     <linearGradient id="bg" x1="82" y1="36" x2="1458" y2="480" gradientUnits="userSpaceOnUse">
       <stop stop-color="#0F172A"/>
@@ -29,7 +29,7 @@
       </g>
     </g>
   </g>
-  <text x="464" y="194" fill="#F1F5F9" font-size="76" font-family="Segoe UI, Arial, sans-serif" font-weight="700">Reading Tracker App</text>
+  <text x="464" y="194" fill="#F1F5F9" font-size="76" font-family="Segoe UI, Arial, sans-serif" font-weight="700">Bookmark</text>
   <text x="464" y="250" fill="#93C5FD" font-size="28" font-family="Segoe UI, Arial, sans-serif" font-weight="700">Track books, reading progress, and finished stats</text>
   <text x="464" y="306" fill="#CBD5E1" font-size="28" font-family="Segoe UI, Arial, sans-serif">React + Vite reading tracker with sync, reminders, and AI-powered helpers.</text>
 </svg>

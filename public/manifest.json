@@ -1,7 +1,7 @@
 {
-  "name": "Reading Goals",
-  "short_name": "Reading",
-  "description": "A personal book reading goals tracker",
+  "name": "Bookmark",
+  "short_name": "Bookmark",
+  "description": "A self-hosted book reading tracker",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
