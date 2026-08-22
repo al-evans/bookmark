@@ -1,4 +1,5 @@
 import { generateText } from 'ai';
+import { requireAppAuth } from './_lib/appAuth.js';
 import {
   aiRequestFailedMessage,
   getAiModelId,
@@ -108,6 +109,8 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
+
+  if (requireAppAuth(req, res) !== true) return undefined;
 
   if (!isAiConfigured()) {
     return res.status(503).json({ error: missingAiKeyMessage() });

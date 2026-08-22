@@ -16,6 +16,7 @@ import {
   isAiConfigured,
   missingAiKeyMessage,
 } from '../api/_lib/aiProvider.js';
+import { requireAppAuth } from '../api/_lib/appAuth.js';
 
 const app = express();
 const port = Number(process.env.API_PORT || 8787);
@@ -304,7 +305,7 @@ app.use((req, res, next) => {
     res.setHeader('Vary', 'Origin');
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
 
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
@@ -326,6 +327,8 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.get('/api/books', async (_req, res) => {
+  if (requireAppAuth(_req, res) !== true) return undefined;
+
   try {
     const books = await readBooks();
     return res.json({ books });
@@ -335,6 +338,8 @@ app.get('/api/books', async (_req, res) => {
 });
 
 app.put('/api/books', async (req, res) => {
+  if (requireAppAuth(req, res) !== true) return undefined;
+
   const books = normalizeBooksPayload(req.body?.books);
 
   if (!books) {
@@ -350,6 +355,8 @@ app.put('/api/books', async (req, res) => {
 });
 
 app.post('/api/ai-estimate', async (req, res) => {
+  if (requireAppAuth(req, res) !== true) return undefined;
+
   if (!isAiConfigured()) {
     return res.status(503).json({
       error: missingAiKeyMessage(),
@@ -419,6 +426,8 @@ app.post('/api/ai-estimate', async (req, res) => {
 });
 
 app.post('/api/ai-book-search', async (req, res) => {
+  if (requireAppAuth(req, res) !== true) return undefined;
+
   const query = normalizeBookSearchQuery(req.body?.query);
   if (!query) {
     return res.status(400).json({ error: 'Enter a title or author to search.' });
@@ -435,6 +444,8 @@ app.post('/api/ai-book-search', async (req, res) => {
 });
 
 app.post('/api/enrich-book', async (req, res) => {
+  if (requireAppAuth(req, res) !== true) return undefined;
+
   const { bookId, title, author, isbn } = req.body ?? {};
   const safeBookId = normalizeText(bookId).slice(0, 120);
   const safeTitle = normalizeText(title).slice(0, 180);

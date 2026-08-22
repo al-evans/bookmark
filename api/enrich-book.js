@@ -1,5 +1,6 @@
 import { generateObject } from 'ai';
 import { z } from 'zod';
+import { requireAppAuth } from './_lib/appAuth.js';
 import {
   aiTimeoutMessage,
   getAiTimeoutMs,
@@ -203,6 +204,8 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
+
+  if (requireAppAuth(req, res) !== true) return undefined;
 
   const { bookId, title, author, isbn } = req.body ?? {};
   const safeBookId = normalizeText(bookId).slice(0, 120);

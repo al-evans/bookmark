@@ -1,7 +1,9 @@
+import { buildAuthHeaders, readApiError } from './appAuth';
+
 export async function getReadingEstimate({ title, currentPercent, avgSpeedPerDay, dateStarted }) {
   const response = await fetch('/api/ai-estimate', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...buildAuthHeaders() },
     body: JSON.stringify({
       title,
       currentPercent,
@@ -11,8 +13,7 @@ export async function getReadingEstimate({ title, currentPercent, avgSpeedPerDay
   });
 
   if (!response.ok) {
-    const data = await response.json().catch(() => null);
-    throw new Error(data?.error || 'AI request failed');
+    throw await readApiError(response, 'AI request failed');
   }
 
   const data = await response.json().catch(() => null);
@@ -25,14 +26,14 @@ export async function getReadingEstimate({ title, currentPercent, avgSpeedPerDay
 export async function enrichBook({ bookId, title, author = '', isbn = '' }) {
   const response = await fetch('/api/enrich-book', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...buildAuthHeaders() },
     body: JSON.stringify({ bookId, title, author, isbn }),
   });
 
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
-    throw new Error(data?.error || 'Book enrichment failed');
+    throw await readApiError(response, 'Book enrichment failed');
   }
 
   return {
@@ -45,7 +46,7 @@ export async function enrichBook({ bookId, title, author = '', isbn = '' }) {
 export async function searchAiBooks({ query, signal }) {
   const response = await fetch('/api/ai-book-search', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...buildAuthHeaders() },
     body: JSON.stringify({ query }),
     signal,
   });
@@ -53,7 +54,7 @@ export async function searchAiBooks({ query, signal }) {
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
-    throw new Error(data?.error || 'AI book search failed');
+    throw await readApiError(response, 'AI book search failed');
   }
 
   return data?.books ?? [];

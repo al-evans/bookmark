@@ -1,4 +1,5 @@
 import { getJsonFromKv, saveJsonToKv } from './_lib/books.js';
+import { requireAppAuth } from './_lib/appAuth.js';
 import { getPublicVapidKey } from './_lib/push.js';
 
 const PUSH_SUBSCRIPTIONS_KEY = process.env.PUSH_SUBSCRIPTIONS_KV_KEY || 'reading-app:push-subscriptions';
@@ -25,6 +26,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
+    if (requireAppAuth(req, res) !== true) return undefined;
+
     const subscription = req.body?.subscription;
     if (!isValidSubscription(subscription)) {
       return res.status(400).json({ error: 'Invalid push subscription.' });
@@ -42,6 +45,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'DELETE') {
+    if (requireAppAuth(req, res) !== true) return undefined;
+
     const endpoint = typeof req.body?.endpoint === 'string' ? req.body.endpoint : '';
     if (!endpoint) {
       return res.status(400).json({ error: 'Endpoint is required.' });

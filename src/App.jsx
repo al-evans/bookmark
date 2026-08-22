@@ -6,6 +6,7 @@ import CurrentlyReadingList from './components/CurrentlyReadingList';
 import AddBookForm from './components/AddBookForm';
 import EditPageCountModal from './components/EditPageCountModal';
 import { enrichBook } from './services/ai';
+import { buildAuthHeaders, getStoredAppPassword, readApiError, saveStoredAppPassword } from './services/appAuth';
 import { hasReadingReminderSubscription, subscribeToReadingReminders } from './services/pushNotifications';
 import { PT_TIME_ZONE_VERSION, getPtDateKey, getTodayPtDateKey, migrateBooksToPtIfNeeded } from './utils/timezone';
 import './App.css';
@@ -152,24 +153,24 @@ function hasTruncatedRecommendation(book) {
   return typeof book?.aiRecommendation === 'string' && /(\.\.\.|…)\s*$/.test(book.aiRecommendation);
 }
 
-async function fetchBooksFromApi() {
-  const response = await fetch('/api/books');
+async function fetchBooksFromApi(appPassword) {
+  const response = await fetch('/api/books', { headers: buildAuthHeaders(appPassword) });
   if (!response.ok) {
-    throw new Error('Could not load books');
+    throw await readApiError(response, 'Could not load books');
   }
   const data = await response.json();
   return normalizeBooks(data?.books ?? []);
 }
 
-async function saveBooksToApi(books) {
+async function saveBooksToApi(books, appPassword) {
   const response = await fetch('/api/books', {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...buildAuthHeaders(appPassword) },
     body: JSON.stringify({ books }),
   });
 
   if (!response.ok) {
-    throw new Error('Could not save books');
+    throw await readApiError(response, 'Could not save books');
   }
 
   const data = await response.json();
@@ -188,6 +189,9 @@ export default function App() {
   const [pushStatus, setPushStatus] = useState('idle');
   const [isResettingOfflineCache, setIsResettingOfflineCache] = useState(false);
   const [adminTestToken] = useState(getAdminTestToken);
+  const [appPassword, setAppPassword] = useState(getStoredAppPassword);
+  const [appPasswordInput, setAppPasswordInput] = useState('');
+  const [appPasswordError, setAppPasswordError] = useState('');
   const [adminTestStatus, setAdminTestStatus] = useState('');
   const [editingBookId, setEditingBookId] = useState(null);
   const [progressBarStyle, setProgressBarStyle] = useState(getProgressBarStyle);
@@ -251,7 +255,7 @@ export default function App() {
 
     async function persistBooks() {
       try {
-        await saveBooksToApi(books);
+        await saveBooksToApi(books, appPassword);
       } catch {
         if (!cancelled) {
           setSyncMessage('Saved here, but shared sync failed just now.');
@@ -264,7 +268,7 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [books, hasSyncedInitialData, syncStatus]);
+  }, [appPassword, books, hasSyncedInitialData, syncStatus]);
 
   useEffect(() => {
     if (!hasSyncedInitialData || syncStatus !== 'ready') return undefined;
@@ -282,7 +286,7 @@ export default function App() {
 
     async function repairRecommendations() {
       try {
-        await saveBooksToApi(books);
+        await saveBooksToApi(books, appPassword);
       } catch {
         if (!cancelled) {
           setSyncMessage('Saved here, but shared sync failed just now.');
@@ -327,7 +331,7 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [books, hasSyncedInitialData, syncStatus]);
+  }, [appPassword, books, hasSyncedInitialData, syncStatus]);
 
   useEffect(() => {
     if (!toastMessage) return undefined;
@@ -545,6 +549,33 @@ export default function App() {
     }
   };
 
+  const handleUnlockSubmit = async (event) => {
+    event.preventDefault();
+    const nextPassword = appPasswordInput.trim();
+
+    if (!nextPassword) {
+      setAppPasswordError('Enter the app password from your Vercel environment.');
+      return;
+    }
+
+    triggerHapticFeedback();
+    setAppPassword(nextPassword);
+    saveStoredAppPassword(nextPassword);
+    setAppPasswordError('');
+    setSyncStatus('loading');
+    await syncInitialBooks({ passwordOverride: nextPassword });
+  };
+
+  const handleClearAppPassword = () => {
+    triggerHapticFeedback();
+    setAppPassword('');
+    setAppPasswordInput('');
+    saveStoredAppPassword('');
+    setSyncStatus('locked');
+    setSyncMessage('');
+    setToastMessage('App password removed from this device');
+  };
+
   const runAdminDryRunChecks = async () => {
     if (!adminTestToken) return;
 
@@ -583,8 +614,10 @@ export default function App() {
     { key: 'settings', label: 'Settings', icon: Settings2 },
   ];
   const isInitialLoading = syncStatus === 'loading';
+  const needsAppPassword = syncStatus === 'locked';
+  const needsSetupPassword = syncStatus === 'setup-missing';
 
-  const syncInitialBooks = useCallback(async ({ silent = false } = {}) => {
+  const syncInitialBooks = useCallback(async ({ silent = false, passwordOverride = appPassword } = {}) => {
     if (isSyncingRef.current) return;
     isSyncingRef.current = true;
 
@@ -593,32 +626,43 @@ export default function App() {
     }
 
     try {
-      const remoteBooks = await fetchBooksFromApi();
+      const remoteBooks = await fetchBooksFromApi(passwordOverride);
       const localBooks = loadBooks();
 
       if (remoteBooks.length === 0 && localBooks.length > 0) {
         const migratedLocal = migrateBooksToPtIfNeeded(localBooks).books;
-        const importedBooks = await saveBooksToApi(migratedLocal);
+        const importedBooks = await saveBooksToApi(migratedLocal, passwordOverride);
         setBooks(importedBooks);
         setToastMessage('Imported your books for shared sync');
       } else {
         const migratedRemote = migrateBooksToPtIfNeeded(remoteBooks);
         setBooks(migratedRemote.books);
         if (migratedRemote.changed) {
-          void saveBooksToApi(migratedRemote.books).catch(() => {});
+          void saveBooksToApi(migratedRemote.books, passwordOverride).catch(() => {});
         }
       }
 
       setSyncStatus('ready');
       setSyncMessage('');
-    } catch {
-      setSyncStatus((current) => (current === 'ready' ? current : 'offline'));
-      setSyncMessage('Shared sync is unavailable, so this device is using its own saved books.');
+    } catch (error) {
+      if (error?.code === 'APP_PASSWORD_REQUIRED') {
+        saveStoredAppPassword('');
+        setAppPassword('');
+        setSyncStatus('locked');
+        setAppPasswordError(passwordOverride ? 'That password did not work.' : '');
+        setSyncMessage('');
+      } else if (error?.code === 'APP_PASSWORD_MISSING') {
+        setSyncStatus('setup-missing');
+        setSyncMessage('Set APP_PASSWORD in Vercel to protect this deployment.');
+      } else {
+        setSyncStatus((current) => (current === 'ready' ? current : 'offline'));
+        setSyncMessage('Shared sync is unavailable, so this device is using its own saved books.');
+      }
     } finally {
       setHasSyncedInitialData(true);
       isSyncingRef.current = false;
     }
-  }, []);
+  }, [appPassword]);
 
   useEffect(() => {
     syncInitialBooks();
@@ -675,7 +719,32 @@ export default function App() {
           </section>
         ) : (
           <>
-            {syncMessage && (
+            {(needsAppPassword || needsSetupPassword) && (
+              <section className="book-section app-lock" aria-labelledby="app-lock-heading">
+                <h2 id="app-lock-heading">{needsSetupPassword ? 'Finish setup' : 'Unlock Bookmark'}</h2>
+                <p>
+                  {needsSetupPassword
+                    ? 'Add APP_PASSWORD in your Vercel environment variables, redeploy, then enter it here.'
+                    : 'Enter the app password for this deployment. It is stored only on this device.'}
+                </p>
+                {needsAppPassword && (
+                  <form className="app-lock__form" onSubmit={handleUnlockSubmit}>
+                    <label htmlFor="app-password">App password</label>
+                    <input
+                      id="app-password"
+                      type="password"
+                      autoComplete="current-password"
+                      value={appPasswordInput}
+                      onChange={(event) => setAppPasswordInput(event.target.value)}
+                    />
+                    {appPasswordError && <p className="app-lock__error">{appPasswordError}</p>}
+                    <button className="btn-add app-lock__button" type="submit">Unlock</button>
+                  </form>
+                )}
+              </section>
+            )}
+
+            {syncMessage && !needsAppPassword && (
               <p className="sync-banner sync-banner--warning">
                 {syncMessage}
                 {syncStatus !== 'ready' && (
@@ -805,6 +874,20 @@ export default function App() {
                         );
                       })}
                     </div>
+                  </div>
+                  <div className="settings-group" aria-labelledby="app-password-heading">
+                    <div className="settings-group__header">
+                      <h3 id="app-password-heading">App password</h3>
+                      <p>Remove the saved password from this device before handing it to someone else.</p>
+                    </div>
+                    <button
+                      className="btn-secondary settings-panel-btn"
+                      type="button"
+                      onClick={handleClearAppPassword}
+                      aria-label="Forget app password on this device"
+                    >
+                      Forget App Password
+                    </button>
                   </div>
                   <button
                     className="btn-secondary settings-panel-btn"
