@@ -1,7 +1,10 @@
 import { getBooksFromKv, normalizeBooksPayload, saveBooksToKv } from './_lib/books.js';
+import { requireAppAuth } from './_lib/appAuth.js';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
+    if (requireAppAuth(req, res) !== true) return undefined;
+
     try {
       const books = await getBooksFromKv();
       return res.status(200).json({ books });
@@ -11,6 +14,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'PUT') {
+    if (requireAppAuth(req, res) !== true) return undefined;
+
     const books = normalizeBooksPayload(req.body?.books);
 
     if (!books) {

@@ -11,7 +11,8 @@ Everything runs in **your** Vercel project against **your** API keys. There is n
 shared service and no central database — your reading data never leaves your own
 deployment.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fal-evans%2Fbookmark)
+[Setup site](https://al-evans.github.io/bookmark/) ·
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fal-evans%2Fbookmark&env=APP_PASSWORD&envDescription=Set%20a%20shared%20password%20that%20protects%20your%20deployed%20reading%20list.%20AI%20keys%20are%20optional%20and%20can%20be%20added%20later.)
 
 ## Features
 
@@ -27,11 +28,13 @@ deployment.
 
 ## Bring your own AI
 
-AI features are **entirely optional**. Without a key the app works normally —
-Open Library still powers book search, and the AI endpoints return a clean `503`
-that the UI handles gracefully.
+AI features are **entirely optional**. This repo does not ship, proxy, or share
+the maintainer's AI key. Without your own key the app works normally — Open
+Library still powers book search, and the AI endpoints return a clean `503` that
+the UI handles gracefully.
 
-Set `AI_PROVIDER` and `AI_API_KEY` to turn them on.
+Set `AI_PROVIDER` and `AI_API_KEY` in your own Vercel project to turn AI on for
+your deployment.
 
 | `AI_PROVIDER` | Default model | Key variable | Get a key |
 |---|---|---|---|
@@ -44,9 +47,17 @@ Override the model with `AI_MODEL` (for example `AI_MODEL=gpt-4o` or
 [Vercel AI SDK](https://sdk.vercel.ai), so adding another is a small change to
 `api/_lib/aiProvider.js` — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Your key is read **server-side only** and is never included in the browser bundle.
+Your key is read **server-side only** in your deployment and is never included in
+the browser bundle. The Deploy with Vercel button creates a new project under
+your Vercel account; it does not connect to the maintainer's Vercel project or
+environment variables.
 
 ## Deploy your own
+
+The default path can stay free: Vercel Hobby for hosting, free Upstash Redis for
+storage, and no AI key unless you choose to add one. The only required secret you
+create yourself is `APP_PASSWORD`, which protects your deployed book list and any
+optional AI endpoint from strangers on the internet.
 
 ### 1. Fork and clone
 
@@ -64,12 +75,21 @@ Import your fork at [vercel.com/new](https://vercel.com/new). The framework
 preset, build command, and output directory are already set in
 [vercel.json](vercel.json), so the defaults will work.
 
-### 3. Add a KV store
+The deploy button above asks for `APP_PASSWORD` during setup. Use a long value
+from your password manager, or generate one with:
 
-Book data is persisted in Vercel KV. In your Vercel project:
+```bash
+openssl rand -base64 24
+```
 
-**Storage → Create Database → KV**, then connect it to the project. Vercel
-injects `KV_REST_API_URL` and `KV_REST_API_TOKEN` automatically.
+### 3. Add free storage
+
+Book data is persisted in Upstash Redis through Vercel Storage. In your Vercel
+project:
+
+**Storage → Create Database → Redis**, then choose the free Upstash option and
+connect it to the project. Vercel injects `KV_REST_API_URL` and
+`KV_REST_API_TOKEN` automatically.
 
 Without these, the deployed `/api/books` returns a configuration error.
 
@@ -81,6 +101,7 @@ In **Project Settings → Environment Variables**:
 |---|---|---|---|
 | `KV_REST_API_URL` | ✅ | — | Vercel KV endpoint (auto-injected) |
 | `KV_REST_API_TOKEN` | ✅ | — | Vercel KV token (auto-injected) |
+| `APP_PASSWORD` | ✅ on Vercel | — | Shared password that protects your deployed app |
 | `AI_PROVIDER` | — | `google` | `google`, `openai`, or `anthropic` |
 | `AI_API_KEY` | — | — | Your AI provider key; enables AI features |
 | `AI_MODEL` | — | per provider | Override the model |
@@ -94,8 +115,18 @@ In **Project Settings → Environment Variables**:
 | `PUSH_SUBSCRIPTIONS_KV_KEY` | — | `reading-app:push-subscriptions` | KV key for subscriptions |
 | `READING_REMINDER_META_KEY` | — | `reading-app:reminder-meta` | KV key for dedupe state |
 
-Generate secrets with `openssl rand -hex 32`. Never commit real values —
-[.gitignore](.gitignore) already excludes `.env`.
+Generate `APP_PASSWORD` with `openssl rand -base64 24` or use a long password
+from your password manager. Generate cron/admin secrets with `openssl rand -hex
+32`. Never commit real values — [.gitignore](.gitignore) already excludes
+`.env`.
+
+When `APP_PASSWORD` is set, the app asks for it the first time you open your
+deployment and stores it only in that browser's local storage. Local development
+stays open by default unless you set `APP_PASSWORD` yourself.
+
+Without `APP_PASSWORD`, Vercel deployments fail closed: `/api/books` and the AI
+routes return a setup error instead of exposing your reading list or provider
+key. Local development stays open by default so you can run the app quickly.
 
 ### 5. Enable push reminders (optional)
 
@@ -136,6 +167,21 @@ you delete the files later. Only enable this on a private fork.
 Note that `backups/` and `books-backup.json` are listed in
 [.gitignore](.gitignore) precisely so this never happens by accident — enabling
 the workflow is a deliberate opt-out of that protection.
+
+### 7. Publish the setup site (optional)
+
+The static landing page in [docs/index.html](docs/index.html) is safe to publish
+with GitHub Pages because it has no backend and no keys. In your fork, go to
+**Settings → Pages**, then set:
+
+| Setting | Value |
+|---|---|
+| Source | Deploy from a branch |
+| Branch | `main` |
+| Folder | `/docs` |
+
+Use that Pages URL as your repository homepage. Do not point the repo homepage
+at a live app that uses your personal Vercel environment variables.
 
 ## Local development
 

@@ -182,6 +182,15 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /My Reading Goals/i })).toBeInTheDocument();
   });
 
+  it('sends the stored app password when loading shared books', async () => {
+    localStorageMock.setItem('bookmark-app-password', 'test-password');
+    await renderApp();
+
+    expect(fetchMock).toHaveBeenCalledWith('/api/books', {
+      headers: { Authorization: 'Bearer test-password' },
+    });
+  });
+
   it('shows bottom navigation tabs', async () => {
     await renderApp();
     expect(screen.getByRole('tab', { name: /Currently Reading/i })).toBeInTheDocument();

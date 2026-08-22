@@ -1,3 +1,5 @@
+import { buildAuthHeaders, readApiError } from './appAuth';
+
 function base64UrlToUint8Array(base64UrlString) {
   const padding = '='.repeat((4 - (base64UrlString.length % 4)) % 4);
   const base64 = (base64UrlString + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -47,12 +49,12 @@ export async function subscribeToReadingReminders() {
 
   const response = await fetch('/api/push-subscriptions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...buildAuthHeaders() },
     body: JSON.stringify({ subscription: subscription.toJSON() }),
   });
 
   if (!response.ok) {
-    throw new Error('Could not save your push subscription.');
+    throw await readApiError(response, 'Could not save your push subscription.');
   }
 
   return true;
