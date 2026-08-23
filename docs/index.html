@@ -212,13 +212,6 @@
         }
       }
 
-      .hero-caption {
-        color: var(--muted);
-        font-size: clamp(0.82rem, 0.79rem + 0.16vw, 0.92rem);
-        margin: calc(var(--space) * 1.5) 0 0;
-        text-align: center;
-      }
-
       .hero-copy {
         display: grid;
         gap: calc(var(--space) * 2);
@@ -294,47 +287,6 @@
         border-color: var(--blue-line);
       }
 
-      .note {
-        color: var(--muted);
-        font-size: 0.95rem;
-        margin: 0;
-      }
-
-      /* ---------- Setup ---------- */
-      .setup {
-        border-top: 1px solid var(--line);
-        display: grid;
-        gap: calc(var(--space) * 3);
-        margin-top: clamp(44px, 8vw, 80px);
-        padding-top: calc(var(--space) * 4);
-      }
-
-      @media (min-width: 760px) {
-        .setup {
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
-
-      .step strong {
-        display: block;
-        font-size: 1.02rem;
-        letter-spacing: -0.02em;
-        margin-bottom: calc(var(--space) * 0.5);
-      }
-
-      .step p {
-        color: var(--muted);
-        margin: 0;
-      }
-
-      code {
-        background: var(--blue-soft);
-        border-radius: 6px;
-        color: var(--blue);
-        font-size: 0.92em;
-        padding: 2px 6px;
-      }
-
       /* ---------- Footer ---------- */
       footer {
         color: var(--muted);
@@ -345,13 +297,9 @@
         text-align: center;
       }
 
-      footer p,
-      footer small {
-        margin: 0;
-      }
-
       footer small {
         font-size: 0.78rem;
+        margin: 0;
       }
 
       .github-link {
@@ -435,11 +383,6 @@
             </video>
           </div>
 
-          <p class="hero-caption">
-            Recorded in the app: log progress on <em>Project Hail Mary</em>, save <em>Yesteryear</em> by Caro Claire
-            Burke to read next, and review <em>A Game of Thrones</em> in your finished list.
-          </p>
-
           <div class="hero-copy">
             <p class="eyebrow">Self-hosted reading tracker</p>
             <h1>Track your reading.</h1>
@@ -456,27 +399,10 @@
                 Read setup
               </a>
             </div>
-            <p class="note">No hosted service. No shared AI key. No required paid plan.</p>
           </div>
-
-          <section class="setup" aria-label="Setup steps">
-            <div class="step">
-              <strong>1. Deploy</strong>
-              <p>Create a Vercel project from the public repo.</p>
-            </div>
-            <div class="step">
-              <strong>2. Store</strong>
-              <p>Connect free Upstash Redis storage.</p>
-            </div>
-            <div class="step">
-              <strong>3. Protect</strong>
-              <p>Set <code>APP_PASSWORD</code>. Add AI later if wanted.</p>
-            </div>
-          </section>
         </main>
 
         <footer>
-          <p>No hosted service. No shared AI key.</p>
           <small>&copy; 2026 Al Evans. Bookmark is open source.</small>
           <a class="github-link" href="https://github.com/al-evans/bookmark">
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
