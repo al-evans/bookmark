@@ -218,91 +218,20 @@
         text-align: left;
       }
 
-      .preview-header {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 14px;
-      }
-
-      .preview-title {
-        font-size: 1rem;
-        font-weight: 850;
-        letter-spacing: -0.02em;
-      }
-
-      .add-dot {
-        align-items: center;
-        background: var(--blue);
-        border-radius: 999px;
-        color: var(--white);
-        display: inline-flex;
-        font-size: 1.3rem;
-        font-weight: 700;
-        height: 48px;
-        justify-content: center;
-        width: 48px;
-      }
-
-      .book-card {
-        align-items: start;
-        background: var(--white);
-        border: 1px solid var(--gray-200);
+      .preview-video {
+        background: var(--black);
         border-radius: 16px;
-        display: grid;
-        gap: 12px;
-        grid-template-columns: 52px 1fr;
-        padding: 12px;
-      }
-
-      .book-cover {
-        background: var(--blue-light);
-        border: 1px solid var(--gray-200);
-        border-radius: 6px;
-        height: 78px;
-        object-fit: cover;
-        width: 52px;
-      }
-
-      .book-card h2 {
-        font-size: 1rem;
-        letter-spacing: -0.02em;
-        line-height: 1.2;
-        margin: 0 0 4px;
-      }
-
-      .book-card p {
-        color: var(--gray-600);
-        font-size: 0.88rem;
-        margin: 0 0 10px;
-      }
-
-      .progress-row {
-        align-items: center;
-        display: flex;
-        gap: 10px;
-      }
-
-      .progress-track {
-        background: var(--gray-200);
-        border-radius: 999px;
-        flex: 1;
-        height: 6px;
-        overflow: hidden;
-      }
-
-      .progress-fill {
-        background: var(--blue);
-        border-radius: inherit;
         display: block;
-        height: 100%;
-        width: 68%;
+        height: auto;
+        max-height: min(66dvh, 620px);
+        object-fit: contain;
+        width: 100%;
       }
 
-      .progress-pct {
-        color: var(--blue-hover);
-        font-size: 0.8rem;
-        font-weight: 850;
+      .preview-caption {
+        color: var(--gray-600);
+        font-size: 0.84rem;
+        margin: 10px 2px 0;
       }
 
       .setup {
@@ -416,29 +345,19 @@
             <p class="note">No hosted service. No shared AI key. No required paid plan.</p>
           </div>
 
-          <aside class="preview" aria-label="Static app preview">
-            <div class="preview-header">
-              <span class="preview-title">My Reading Goals</span>
-              <span class="add-dot" aria-hidden="true">+</span>
-            </div>
-            <article class="book-card">
-              <img
-                class="book-cover"
-                src="https://covers.openlibrary.org/b/isbn/9780593135204-M.jpg"
-                alt="Cover of Project Hail Mary"
-                width="52"
-                height="78"
-                decoding="async"
-              />
-              <div>
-                <h2>Project Hail Mary</h2>
-                <p>by Andy Weir</p>
-                <div class="progress-row" aria-label="68 percent complete">
-                  <span class="progress-track"><span class="progress-fill"></span></span>
-                  <span class="progress-pct">68%</span>
-                </div>
-              </div>
-            </article>
+          <aside class="preview" aria-label="Bookmark app demo">
+            <video
+              class="preview-video"
+              controls
+              playsinline
+              preload="metadata"
+              poster="bookmark-demo-poster.jpg"
+              aria-label="Short screen recording of the Bookmark reading tracker"
+            >
+              <source src="bookmark-demo.mp4" type="video/mp4" />
+              Your browser does not support embedded video.
+            </video>
+            <p class="preview-caption">See the reading tracker in action.</p>
           </aside>
         </section>
 
