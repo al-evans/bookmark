@@ -2,10 +2,11 @@
 
 ![Bookmark banner](docs/readme-banner.svg)
 
-A self-hosted book reading tracker built with React + Vite, deployed on Vercel.
-Log what you're reading, track daily progress, get a lock-screen reminder when
-you skip a day, and optionally use an AI provider of your choice for book search
-and reading tips.
+Your reading tracker. Your data.
+
+Bookmark is a self-hosted reading tracker built with React + Vite for Vercel.
+Log books, track progress, see finished stats, and optionally use your own AI
+provider for book search and reading tips.
 
 Everything runs in **your** Vercel project against **your** API keys. There is no
 shared service and no central database — your reading data never leaves your own
