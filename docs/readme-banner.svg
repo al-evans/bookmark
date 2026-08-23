@@ -29,8 +29,8 @@
     <path d="M42 30l3.2 6.5 7.1 1-5.1 5 1.2 7.1-6.4-3.4-6.4 3.4 1.2-7.1-5.1-5 7.1-1L42 30z" fill="#EFF6FF"/>
   </g>
 
-  <text x="112" y="222" fill="#0F172A" font-size="82" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-4">Your reading tracker.</text>
-  <text x="112" y="304" fill="#0F172A" font-size="82" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-4">Your data.</text>
+  <text x="112" y="222" fill="#0F172A" font-size="82" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-4">Track your reading.</text>
+  <text x="112" y="304" fill="#0F172A" font-size="82" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-4">Self-hosted.</text>
   <text x="116" y="366" fill="#475569" font-size="30" font-family="Inter, Segoe UI, Arial, sans-serif">Free self-hosted setup. Optional bring-your-own AI.</text>
 
   <g transform="translate(1048 48)" filter="url(#shadow)">

@@ -30,8 +30,8 @@
   </g>
 
   <text x="80" y="250" fill="#0F172A" font-size="76" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-4">Bookmark</text>
-  <text x="82" y="334" fill="#0F172A" font-size="60" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-3">Your reading tracker.</text>
-  <text x="82" y="402" fill="#0F172A" font-size="60" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-3">Your data.</text>
+  <text x="82" y="334" fill="#0F172A" font-size="60" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-3">Track your reading.</text>
+  <text x="82" y="402" fill="#0F172A" font-size="60" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" letter-spacing="-3">Self-hosted.</text>
   <text x="84" y="468" fill="#475569" font-size="28" font-family="Inter, Segoe UI, Arial, sans-serif">Free self-hosted setup. Optional bring-your-own AI.</text>
 
   <g transform="translate(790 70)" filter="url(#shadow)">

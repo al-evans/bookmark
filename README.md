@@ -2,7 +2,7 @@
 
 ![Bookmark banner](docs/readme-banner.svg)
 
-Your reading tracker. Your data.
+Track your reading. Self-hosted.
 
 Bookmark is a self-hosted reading tracker built with React + Vite for Vercel.
 Log books, track progress, see finished stats, and optionally use your own AI
