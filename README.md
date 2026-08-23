@@ -5,12 +5,11 @@
 Track your reading. Self-hosted.
 
 Bookmark is a self-hosted reading tracker built with React + Vite for Vercel.
-Log books, track progress, see finished stats, and optionally use your own AI
-provider for book search and reading tips.
+Log books, track progress, see finished stats, and add optional bring-your-own
+AI for book search and reading tips.
 
-Everything runs in **your** Vercel project against **your** API keys. There is no
-shared service and no central database — your reading data never leaves your own
-deployment.
+Deploy a private copy with free Vercel hosting and free Upstash Redis storage.
+There is no hosted service, shared AI key, or central database.
 
 [Setup site](https://al-evans.github.io/bookmark/) ·
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fal-evans%2Fbookmark&env=APP_PASSWORD&envDescription=Set%20a%20shared%20password%20that%20protects%20your%20deployed%20reading%20list.%20AI%20keys%20are%20optional%20and%20can%20be%20added%20later.)

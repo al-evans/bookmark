@@ -26,7 +26,8 @@
       content="Free self-hosted setup for a private reading tracker. Optional bring-your-own AI."
     />
     <meta name="twitter:image" content="https://al-evans.github.io/bookmark/social-preview.png" />
-    <meta name="theme-color" content="#111827" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="preconnect" href="https://covers.openlibrary.org" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%23eff6ff'/%3E%3Cpath d='M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z' fill='%230f172a'/%3E%3Cpolygon points='96,68 102.7,82 118,84 107,94.5 109.7,109.7 96,102.5 82.3,109.7 85,94.5 74,84 89.3,82' fill='%23eff6ff'/%3E%3C/svg%3E"
@@ -35,16 +36,16 @@
     <style>
       :root {
         color-scheme: light;
-        --blue: #4f46e5;
-        --blue-hover: #4338ca;
-        --blue-light: #eef2ff;
-        --blue-border: #c7d2fe;
-        --black: #111827;
-        --gray-800: #1f2937;
-        --gray-600: #4b5563;
-        --gray-400: #9ca3af;
-        --gray-200: #e5e7eb;
-        --gray-100: #f9fafb;
+        --blue: #1d4ed8;
+        --blue-hover: #1e40af;
+        --blue-light: #eff6ff;
+        --blue-border: #bfdbfe;
+        --black: #0f172a;
+        --gray-800: #1e293b;
+        --gray-600: #475569;
+        --gray-400: #94a3b8;
+        --gray-200: #e2e8f0;
+        --gray-100: #f1f5f9;
         --white: #ffffff;
         --radius: 14px;
       }
@@ -57,8 +58,8 @@
         margin: 0;
         min-height: 100dvh;
         background:
-          radial-gradient(circle at 80% 0%, rgba(79, 70, 229, 0.16), transparent 36rem),
-          linear-gradient(180deg, #ffffff 0%, var(--gray-100) 52%, #eef2ff 100%);
+          radial-gradient(circle at 80% 0%, rgba(29, 78, 216, 0.16), transparent 36rem),
+          linear-gradient(180deg, #ffffff 0%, var(--gray-100) 52%, #e0e7ff 100%);
         color: var(--black);
         font: 16px/1.55 Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -151,7 +152,11 @@
       .github-icon-link:hover,
       .github-icon-link:focus-visible {
         background: var(--blue-light);
-        outline: 2px solid transparent;
+      }
+
+      .github-icon-link:focus-visible {
+        outline: 3px solid rgba(29, 78, 216, 0.28);
+        outline-offset: 3px;
       }
 
       .hero {
@@ -226,7 +231,7 @@
       .button--primary {
         background: var(--blue);
         color: var(--white);
-        box-shadow: 0 12px 28px rgba(79, 70, 229, 0.24);
+        box-shadow: 0 12px 28px rgba(29, 78, 216, 0.24);
       }
 
       .button--primary:hover,
@@ -247,7 +252,7 @@
       }
 
       .button:focus-visible {
-        outline: 3px solid rgba(79, 70, 229, 0.28);
+        outline: 3px solid rgba(29, 78, 216, 0.28);
         outline-offset: 3px;
       }
 
@@ -434,7 +439,7 @@
       }
 
       .preview-nav__item--active {
-        background: rgba(79, 70, 229, 0.38);
+        background: var(--blue);
         color: var(--white);
       }
 
@@ -546,7 +551,7 @@
             <span class="brand-mark" aria-hidden="true">
               <svg viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="192" height="192" rx="40" fill="#eff6ff" />
-                <path d="M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z" fill="#111827" />
+                <path d="M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z" fill="#0f172a" />
                 <polygon points="96,68 102.7,82 118,84 107,94.5 109.7,109.7 96,102.5 82.3,109.7 85,94.5 74,84 89.3,82" fill="#eff6ff" />
               </svg>
             </span>
@@ -594,7 +599,9 @@
                     class="book-cover"
                     src="https://covers.openlibrary.org/b/isbn/9780593135204-M.jpg"
                     alt="Cover of Project Hail Mary"
-                    loading="lazy"
+                    width="48"
+                    height="72"
+                    decoding="async"
                   />
                   <div class="book-info">
                     <h2>Project Hail Mary</h2>
@@ -610,7 +617,9 @@
                     class="book-cover"
                     src="https://covers.openlibrary.org/b/isbn/9780593321201-M.jpg"
                     alt="Cover of Tomorrow, and Tomorrow, and Tomorrow"
-                    loading="lazy"
+                    width="48"
+                    height="72"
+                    decoding="async"
                   />
                   <div class="book-info">
                     <h2>Tomorrow, and Tomorrow, and Tomorrow</h2>
