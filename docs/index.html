@@ -348,7 +348,10 @@
           <aside class="preview" aria-label="Bookmark app demo">
             <video
               class="preview-video"
+              autoplay
               controls
+              loop
+              muted
               playsinline
               preload="metadata"
               poster="bookmark-demo-poster.jpg"
@@ -394,6 +397,16 @@
           if (navigator.vibrate) navigator.vibrate(50);
         });
       });
+
+      const previewVideo = document.querySelector(".preview-video");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const syncVideoMotionPreference = () => {
+        if (reducedMotion.matches) {
+          previewVideo.pause();
+        }
+      };
+      reducedMotion.addEventListener("change", syncVideoMotionPreference);
+      syncVideoMotionPreference();
     </script>
   </body>
 </html>
