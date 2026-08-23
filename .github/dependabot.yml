@@ -7,19 +7,33 @@ updates:
     schedule:
       interval: weekly
       day: monday
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3
     groups:
-      # One PR for routine bumps rather than one per package. Majors are
-      # left ungrouped so they get reviewed on their own.
+      # One PR for routine bumps rather than one per package. Major upgrades are
+      # ignored here so Dependabot stays quiet unless a human opts into them.
+      # Security updates are still enabled at the repository level.
       minor-and-patch:
         update-types:
           - minor
           - patch
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
 
-  # Keeps the actions pinned in ci.yml from going stale.
+  # Keeps workflow actions pinned without opening major-upgrade noise.
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
       day: monday
     open-pull-requests-limit: 3
+    groups:
+      actions-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
