@@ -69,7 +69,7 @@
         color: var(--white);
         display: flex;
         gap: 14px;
-        justify-content: space-between;
+        justify-content: flex-start;
         min-height: 68px;
         padding: 10px 12px 10px 16px;
         box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
@@ -112,18 +112,21 @@
         margin: 3px 0 0;
       }
 
-      .topbar__link {
+      .github-icon-link {
         align-items: center;
-        border: 1px solid rgba(255, 255, 255, 0.22);
         border-radius: 999px;
-        color: var(--white);
+        color: var(--blue);
         display: inline-flex;
-        font-size: 0.9rem;
-        font-weight: 800;
+        height: 48px;
         justify-content: center;
-        min-height: 48px;
-        padding: 0 16px;
+        margin: 8px auto 0;
+        width: 48px;
         text-decoration: none;
+      }
+
+      .github-icon-link svg {
+        height: 24px;
+        width: 24px;
       }
 
       .hero {
@@ -149,22 +152,7 @@
       }
 
       .hero-card {
-        overflow: hidden;
         padding: clamp(26px, 6vw, 58px);
-        position: relative;
-      }
-
-      .hero-card::after {
-        background:
-          radial-gradient(circle, rgba(191, 219, 254, 0.78) 0 20%, transparent 21%),
-          radial-gradient(circle, rgba(29, 78, 216, 0.10), transparent 56%);
-        content: "";
-        height: 260px;
-        pointer-events: none;
-        position: absolute;
-        right: -80px;
-        top: -92px;
-        width: 260px;
       }
 
       .eyebrow {
@@ -249,25 +237,27 @@
       }
 
       .phone-card {
-        padding: 18px;
+        padding: 16px;
       }
 
       .phone {
-        background: var(--black);
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 34px;
-        color: var(--white);
+        animation: phone-float 7s ease-in-out infinite;
+        background: var(--gray-100);
+        border: 1px solid var(--gray-200);
+        border-radius: 28px;
+        color: var(--black);
         overflow: hidden;
-        padding: 14px;
       }
 
       .phone-header {
         align-items: center;
+        background: var(--black);
         border-bottom: 3px solid var(--blue);
+        color: var(--white);
         display: flex;
         justify-content: space-between;
-        min-height: 54px;
-        padding-bottom: 12px;
+        min-height: 66px;
+        padding: 10px 12px 10px 16px;
       }
 
       .phone-header span {
@@ -278,6 +268,7 @@
 
       .add-dot {
         align-items: center;
+        animation: add-pulse 2.8s ease-in-out infinite;
         background: var(--blue);
         border-radius: 50%;
         display: inline-flex;
@@ -290,18 +281,64 @@
 
       .phone-body {
         background: var(--gray-100);
-        border-radius: 24px;
         color: var(--black);
-        margin-top: 14px;
         padding: 14px;
       }
 
-      .book-card {
+      .preview-tabs {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(3, 1fr);
+        margin-bottom: 12px;
+      }
+
+      .preview-tab {
+        align-items: center;
         background: var(--white);
         border: 1px solid var(--gray-200);
-        border-radius: 16px;
-        margin-bottom: 10px;
-        padding: 14px;
+        border-radius: 999px;
+        color: var(--gray-600);
+        display: inline-flex;
+        font-size: 0.73rem;
+        font-weight: 800;
+        justify-content: center;
+        min-height: 36px;
+        padding: 0 8px;
+      }
+
+      .preview-tab--active {
+        animation: tab-glow 4.8s ease-in-out infinite;
+        background: var(--blue);
+        border-color: var(--blue);
+        color: var(--white);
+      }
+
+      .book-card {
+        animation: card-rise 650ms ease both;
+        background: var(--white);
+        border: 1px solid var(--gray-200);
+        border-radius: 6px;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 44px 1fr;
+        margin-bottom: 8px;
+        padding: 10px;
+      }
+
+      .book-card:nth-of-type(2) {
+        animation-delay: 180ms;
+      }
+
+      .book-cover {
+        background: linear-gradient(145deg, #dbeafe, #eef2ff);
+        border: 1px solid var(--gray-200);
+        border-radius: 4px;
+        height: 66px;
+        width: 44px;
+      }
+
+      .book-info {
+        min-width: 0;
       }
 
       .book-card h2 {
@@ -313,17 +350,25 @@
       .book-card p {
         color: var(--gray-600);
         font-size: 0.86rem;
-        margin: 0 0 12px;
+        margin: 0 0 10px;
+      }
+
+      .progress-row {
+        align-items: center;
+        display: flex;
+        gap: 8px;
       }
 
       .progress-track {
         background: #dbeafe;
         border-radius: 999px;
+        flex: 1;
         height: 10px;
         overflow: hidden;
       }
 
       .progress-fill {
+        animation: progress-demo 5.5s ease-in-out infinite;
         background: linear-gradient(90deg, var(--blue), #60a5fa);
         border-radius: inherit;
         display: block;
@@ -331,14 +376,69 @@
         width: 68%;
       }
 
-      .ai-note {
-        background: var(--blue-light);
-        border: 1px solid var(--blue-border);
-        border-radius: 14px;
+      .progress-pct {
         color: var(--blue-hover);
-        font-size: 0.84rem;
-        font-weight: 700;
-        padding: 12px;
+        font-size: 0.78rem;
+        font-weight: 900;
+      }
+
+      @keyframes phone-float {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+
+      @keyframes add-pulse {
+        0%, 100% {
+          box-shadow: 0 0 0 0 rgba(29, 78, 216, 0.28);
+          transform: scale(1);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(29, 78, 216, 0);
+          transform: scale(1.04);
+        }
+      }
+
+      @keyframes tab-glow {
+        0%, 100% {
+          box-shadow: 0 0 0 rgba(29, 78, 216, 0);
+        }
+        50% {
+          box-shadow: 0 8px 18px rgba(29, 78, 216, 0.22);
+        }
+      }
+
+      @keyframes card-rise {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes progress-demo {
+        0%, 100% {
+          width: 68%;
+        }
+        50% {
+          width: 82%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .phone,
+        .add-dot,
+        .preview-tab--active,
+        .book-card,
+        .progress-fill {
+          animation: none;
+        }
       }
 
       .steps {
@@ -389,29 +489,6 @@
         padding: 6px 12px;
       }
 
-      .trust-grid {
-        display: grid;
-        gap: 16px;
-        margin-top: 16px;
-      }
-
-      @media (min-width: 760px) {
-        .trust-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-
-      .trust-card {
-        padding: 22px;
-      }
-
-      .trust-card ul {
-        display: grid;
-        gap: 9px;
-        margin: 0;
-        padding-left: 1.15rem;
-      }
-
       footer {
         color: var(--gray-600);
         margin-top: 28px;
@@ -444,16 +521,14 @@
               <p>Self-hosted reading goals</p>
             </div>
           </div>
-          <a class="topbar__link" href="https://github.com/al-evans/bookmark">GitHub</a>
         </header>
 
         <section class="hero">
           <div class="hero-card">
             <p class="eyebrow">Free self-hosted setup</p>
-            <h2 class="hero-title">Your reading tracker, in your own Vercel project.</h2>
+            <h2 class="hero-title">Your reading tracker. Your data.</h2>
             <p class="lede">
-              Track books, progress, finished stats, and reminders without a hosted service.
-              Optional AI uses only the provider key you add to your own deployment.
+              Deploy a private copy on Vercel. AI stays off unless you add your own key.
             </p>
             <div class="actions">
               <a
@@ -468,7 +543,7 @@
             </div>
             <p class="cost-note">
               <span class="pill">$0 default</span>
-              Vercel Hobby + free Upstash Redis. AI stays off unless you add your own key.
+              Free hosting and storage path. Optional AI.
             </p>
           </div>
 
@@ -479,16 +554,29 @@
                 <span class="add-dot">+</span>
               </div>
               <div class="phone-body">
+                <div class="preview-tabs" aria-hidden="true">
+                  <span class="preview-tab preview-tab--active">Reading</span>
+                  <span class="preview-tab">Want</span>
+                  <span class="preview-tab">Finished</span>
+                </div>
                 <article class="book-card">
-                  <h2>Project Hail Mary</h2>
-                  <p>Andy Weir · 68% complete</p>
-                  <span class="progress-track"><span class="progress-fill"></span></span>
+                  <span class="book-cover" aria-hidden="true"></span>
+                  <div class="book-info">
+                    <h2>Project Hail Mary</h2>
+                    <p>Andy Weir · Started Apr 12</p>
+                    <div class="progress-row">
+                      <span class="progress-track"><span class="progress-fill"></span></span>
+                      <span class="progress-pct">68%</span>
+                    </div>
+                  </div>
                 </article>
                 <article class="book-card">
-                  <h2>Want to Read</h2>
-                  <p>Search Open Library first. Add AI suggestions only if you want them.</p>
+                  <span class="book-cover" aria-hidden="true"></span>
+                  <div class="book-info">
+                    <h2>Tomorrow, and Tomorrow, and Tomorrow</h2>
+                    <p>Gabrielle Zevin · Up next</p>
+                  </div>
                 </article>
-                <p class="ai-note">Protected by your APP_PASSWORD. No shared AI key, database, or hosted service.</p>
               </div>
             </div>
           </aside>
@@ -498,44 +586,29 @@
           <article class="step">
             <span class="badge">1</span>
             <h2>Deploy your copy</h2>
-            <p>Clone the public repo into your Vercel account. It does not connect to the maintainer's app.</p>
+            <p>Create your own Vercel project.</p>
           </article>
           <article class="step">
             <span class="badge">2</span>
             <h2>Add free storage</h2>
-            <p>Create a free Upstash Redis database in Vercel Storage so your book list persists.</p>
+            <p>Connect free Upstash Redis.</p>
           </article>
           <article class="step">
             <span class="badge">3</span>
             <h2>Set a password</h2>
-            <p>Add <code>APP_PASSWORD</code>. Optional AI summaries work only if you add your own AI key.</p>
-          </article>
-        </section>
-
-        <section class="trust-grid" aria-label="Security and ownership">
-          <article class="trust-card">
-            <h2>What stays private</h2>
-            <ul>
-              <li>Your books live in your own Upstash Redis database.</li>
-              <li>Your password is stored only in your browser.</li>
-              <li>Your AI provider key is never bundled into the frontend.</li>
-            </ul>
-          </article>
-          <article class="trust-card">
-            <h2>What stays optional</h2>
-            <ul>
-              <li>No AI key is needed for manual entry or Open Library search.</li>
-              <li>Push reminders need VAPID keys only if you turn them on.</li>
-              <li>Backups are disabled until you opt in.</li>
-            </ul>
+            <p>Add <code>APP_PASSWORD</code>. Add AI later if wanted.</p>
           </article>
         </section>
 
         <footer>
           <p>
-            Open source on <a href="https://github.com/al-evans/bookmark">GitHub</a>.
-            Built for personal reading goals, not a hosted service.
+            No hosted service. No shared AI key.
           </p>
+          <a class="github-icon-link" href="https://github.com/al-evans/bookmark" aria-label="Open Bookmark on GitHub">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.5v-1.75c-2.78.62-3.37-1.37-3.37-1.37-.46-1.2-1.11-1.52-1.11-1.52-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.93c.85 0 1.7.12 2.5.34 1.9-1.33 2.74-1.05 2.74-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9v2.83c0 .28.18.6.69.5A10.1 10.1 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z" />
+            </svg>
+          </a>
         </footer>
       </div>
     </main>
