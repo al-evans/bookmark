@@ -5,7 +5,7 @@ const STEPS = [
   {
     key: 'storage',
     title: 'Connect storage',
-    where: 'Vercel → Storage → Create Database → Redis',
+    where: 'Vercel → Storage → Connect Store → Upstash KV',
     detail: 'Pick the free Upstash plan and connect it to this project. Vercel fills in the keys for you.',
   },
   {

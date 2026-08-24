@@ -19,10 +19,19 @@ beforeEach(() => {
 
 describe('SetupChecklist', () => {
   it('refreshes setup status before retrying books', async () => {
+    const calls = [];
     fetchMock
-      .mockResolvedValueOnce(healthResponse({ storage: false, password: false, complete: false }))
-      .mockResolvedValueOnce(healthResponse({ storage: true, password: true, complete: true }));
-    const onRetry = vi.fn(async () => {});
+      .mockImplementationOnce(async () => {
+        calls.push('health-initial');
+        return healthResponse({ storage: false, password: false, complete: false });
+      })
+      .mockImplementationOnce(async () => {
+        calls.push('health-retry');
+        return healthResponse({ storage: true, password: true, complete: true });
+      });
+    const onRetry = vi.fn(async () => {
+      calls.push('books-retry');
+    });
 
     render(<SetupChecklist onRetry={onRetry} />);
 
@@ -37,7 +46,7 @@ describe('SetupChecklist', () => {
       expect(fetchMock).toHaveBeenCalledTimes(2);
       expect(onRetry).toHaveBeenCalledTimes(1);
     });
-    expect(fetchMock.mock.invocationCallOrder[1]).toBeLessThan(onRetry.mock.invocationCallOrder[0]);
+    expect(calls).toEqual(['health-initial', 'health-retry', 'books-retry']);
     expect(screen.getAllByText('Done')).toHaveLength(2);
   });
 
