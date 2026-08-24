@@ -37,52 +37,54 @@ AI key for book search and reading tips.
 
 ## Deploy your own
 
-The default path stays free: Vercel Hobby for hosting, free Upstash Redis for
-storage, and no AI key unless you want one. The only secret you must create is
-`APP_PASSWORD`, which keeps strangers out of your book list.
+You do not need a terminal. The default path stays free: Vercel Hobby for
+hosting, a free Upstash Redis store for your books, and no AI key unless you
+want one.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fal-evans%2Fbookmark&env=APP_PASSWORD&envDescription=Set%20a%20shared%20password%20that%20protects%20your%20deployed%20reading%20list.%20AI%20keys%20are%20optional%20and%20can%20be%20added%20later.)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fal-evans%2Fbookmark&project-name=bookmark&repository-name=bookmark&env=APP_PASSWORD&envDescription=Pick%20a%20password%20that%20unlocks%20your%20reading%20list.%20Bookmark%20asks%20for%20it%20once%2C%20then%20keeps%20it%20only%20in%20your%20browser.%20Any%20long%20phrase%20works.&envLink=https%3A%2F%2Fal-evans.github.io%2Fbookmark%2F%23password&stores=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22upstash%22%2C%22productSlug%22%3A%22redis%22%2C%22protocol%22%3A%22storage%22%7D%5D)
 
-### 1. Fork and clone
+### 1. Click the button
 
-```bash
-git clone https://github.com/<your-username>/bookmark.git
-cd bookmark
-npm install
-```
+Vercel copies this repository into your own GitHub account. Sign in with
+GitHub if you are not signed in already.
 
-### 2. Create the Vercel project
+### 2. Fill in the one screen Vercel shows you
 
-Import your fork at [vercel.com/new](https://vercel.com/new). The framework
-preset, build command, and output directory are already set in
-[vercel.json](vercel.json), so the defaults work.
+| Field | What to do |
+|---|---|
+| **Storage** | Vercel offers an Upstash Redis store. Accept it and pick the free plan. This is where your books live. |
+| **`APP_PASSWORD`** | Type a password. It keeps strangers out of your reading list. Need one? [Generate a password](https://al-evans.github.io/bookmark/#password) — it is made in your browser and never sent anywhere. |
 
-### 3. Add free storage
+Because the storage and the password are both set before the first build,
+you do not have to deploy a second time.
 
-In your Vercel project, go to **Storage → Create Database → Redis**, choose the
-free Upstash option, and connect it. Vercel injects `KV_REST_API_URL` and
-`KV_REST_API_TOKEN` for you.
+### 3. Open your app and enter that password
 
-Without these, `/api/books` returns a configuration error.
+Bookmark asks for the password once and keeps it only in that browser. To
+read your list on your phone as well, enter the same password there.
 
-### 4. Set your password
+That is the whole required setup. Everything below is optional.
 
-Generate a strong value:
+> **Something missing?** If the app opens on a **Finish setup** screen, it is
+> telling you which of the two steps above did not complete. Fix it in Vercel,
+> then press **Check again**.
 
-```bash
-openssl rand -base64 24
-```
+<details>
+<summary><b>Prefer to do it by hand?</b></summary>
 
-Add it as `APP_PASSWORD` in **Project Settings → Environment Variables**, then
-redeploy.
+<br>
 
-The app asks for this password the first time you open your deployment and
-stores it only in that browser's local storage. Without it, Vercel deployments
-fail closed — `/api/books` and the AI routes return a setup error rather than
-exposing your reading list or provider key. Local development stays open by
-default unless you set `APP_PASSWORD` yourself.
+1. Fork this repository on GitHub.
+2. Import the fork at [vercel.com/new](https://vercel.com/new). The framework
+   preset, build command, and output directory already come from
+   [vercel.json](vercel.json).
+3. In the project, open **Storage → Create Database → Redis** and choose the
+   free Upstash plan. Vercel injects `KV_REST_API_URL` and `KV_REST_API_TOKEN`.
+4. In **Settings → Environment Variables**, add `APP_PASSWORD`. Generate a
+   strong value with `openssl rand -base64 24` if you like.
+5. Redeploy, because the first build ran before those values existed.
 
-That's the whole required setup. Everything below is optional.
+</details>
 
 <details>
 <summary><b>All environment variables</b></summary>
@@ -212,6 +214,8 @@ it does not connect to the maintainer's project or environment variables.
 ## Local development
 
 ```bash
+git clone https://github.com/<your-username>/bookmark.git
+cd bookmark
 cp .env.example .env    # fill in what you need — all of it is optional locally
 npm install
 npm run dev
@@ -329,6 +333,10 @@ Add `&mode=send` to force a real send. Default is dry-run.
 
 Built-in protections:
 
+- Deployments fail closed. Without `APP_PASSWORD`, `/api/books` and the AI
+  routes return a setup error rather than exposing your reading list or your
+  provider key. Local development stays open unless you set `APP_PASSWORD`.
+- The password is held only in the browser you type it into, never in the repo
 - AI keys are server-side only and never reach the browser bundle
 - Origin allowlist via `ALLOWED_ORIGINS`
 - JSON body size limit (`10kb`) and request rate limiting

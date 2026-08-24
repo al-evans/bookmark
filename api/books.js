@@ -9,7 +9,10 @@ export default async function handler(req, res) {
       const books = await getBooksFromKv();
       return res.status(200).json({ books });
     } catch (error) {
-      return res.status(503).json({ error: error?.message || 'Could not load books.' });
+      return res.status(503).json({
+        error: error?.message || 'Could not load books.',
+        code: error?.code || '',
+      });
     }
   }
 
@@ -26,7 +29,10 @@ export default async function handler(req, res) {
       await saveBooksToKv(books);
       return res.status(200).json({ books });
     } catch (error) {
-      return res.status(503).json({ error: error?.message || 'Could not save books.' });
+      return res.status(503).json({
+        error: error?.message || 'Could not save books.',
+        code: error?.code || '',
+      });
     }
   }
 

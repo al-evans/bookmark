@@ -16,7 +16,7 @@ import {
   isAiConfigured,
   missingAiKeyMessage,
 } from '../api/_lib/aiProvider.js';
-import { requireAppAuth } from '../api/_lib/appAuth.js';
+import { isAppAuthConfigured, requireAppAuth } from '../api/_lib/appAuth.js';
 
 const app = express();
 const port = Number(process.env.API_PORT || 8787);
@@ -323,7 +323,16 @@ app.use((req, res, next) => {
 });
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true });
+  // Local development stores books in a file, so storage is always ready here.
+  res.json({
+    ok: true,
+    setup: {
+      storage: true,
+      password: isAppAuthConfigured(),
+      ai: isAiConfigured(),
+      complete: true,
+    },
+  });
 });
 
 app.get('/api/books', async (_req, res) => {

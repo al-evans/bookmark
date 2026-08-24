@@ -5,6 +5,7 @@ import WantToReadList from './components/WantToReadList';
 import CurrentlyReadingList from './components/CurrentlyReadingList';
 import AddBookForm from './components/AddBookForm';
 import EditPageCountModal from './components/EditPageCountModal';
+import SetupChecklist from './components/SetupChecklist';
 import { enrichBook } from './services/ai';
 import { buildAuthHeaders, getStoredAppPassword, readApiError, saveStoredAppPassword } from './services/appAuth';
 import { hasReadingReminderSubscription, subscribeToReadingReminders } from './services/pushNotifications';
@@ -656,7 +657,10 @@ export default function App() {
         setSyncMessage('');
       } else if (error?.code === 'APP_PASSWORD_MISSING') {
         setSyncStatus('setup-missing');
-        setSyncMessage('Set APP_PASSWORD in Vercel to protect this deployment.');
+        setSyncMessage('');
+      } else if (error?.code === 'KV_NOT_CONFIGURED') {
+        setSyncStatus('setup-missing');
+        setSyncMessage('');
       } else {
         setSyncStatus((current) => (current === 'ready' ? current : 'offline'));
         setSyncMessage('Shared sync is unavailable, so this device is using its own saved books.');
@@ -727,9 +731,12 @@ export default function App() {
                 <h2 id="app-lock-heading">{needsSetupPassword ? 'Finish setup' : 'Unlock Bookmark'}</h2>
                 <p>
                   {needsSetupPassword
-                    ? 'Add APP_PASSWORD in your Vercel environment variables, redeploy, then enter it here.'
+                    ? 'This deployment is not ready yet. Finish the steps below, then deploy again.'
                     : 'Enter the app password for this deployment. It is stored only on this device.'}
                 </p>
+                {needsSetupPassword && (
+                  <SetupChecklist onRetry={() => syncInitialBooks()} />
+                )}
                 {needsAppPassword && (
                   <form className="app-lock__form" onSubmit={handleUnlockSubmit}>
                     <label htmlFor="app-password">App password</label>
@@ -741,7 +748,7 @@ export default function App() {
                       onChange={(event) => setAppPasswordInput(event.target.value)}
                     />
                     {appPasswordError && <p className="app-lock__error">{appPasswordError}</p>}
-                    <button className="btn-add app-lock__button" type="submit">Unlock</button>
+                    <button className="btn-primary app-lock__button" type="submit">Unlock</button>
                   </form>
                 )}
               </section>

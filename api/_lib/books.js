@@ -61,7 +61,11 @@ export async function kvCommand(command) {
   const token = process.env.KV_REST_API_TOKEN;
 
   if (!apiUrl || !token) {
-    throw new Error('KV is not configured. Add KV_REST_API_URL and KV_REST_API_TOKEN.');
+    const error = new Error(
+      'Storage is not connected. Add a Redis store to this Vercel project.'
+    );
+    error.code = 'KV_NOT_CONFIGURED';
+    throw error;
   }
 
   const response = await fetch(apiUrl, {
