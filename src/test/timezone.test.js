@@ -14,6 +14,10 @@ describe('timezone utilities', () => {
     expect(getPtDateKey('2026-04-11T08:30:00.000Z')).toBe('2026-04-11');
   });
 
+  it('preserves date-only keys instead of reparsing them as UTC instants', () => {
+    expect(getPtDateKey('2026-08-24')).toBe('2026-08-24');
+  });
+
   it('shifts ISO dates safely across month boundaries', () => {
     expect(shiftIsoDate('2026-03-01', -1)).toBe('2026-02-28');
     expect(shiftIsoDate('2026-12-31', 1)).toBe('2027-01-01');

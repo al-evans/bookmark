@@ -19,6 +19,11 @@ import {
 
 const MIN_LOGS_FOR_ESTIMATE = 3;
 
+function formatPagesPerDay(pagesPerDay) {
+  const rounded = Math.round(pagesPerDay * 10) / 10;
+  return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+}
+
 function ProgressBar({ percentage, variant = 'classic' }) {
   return (
     <div className={`progress-bar-track progress-bar-track--${variant}`} role="progressbar" aria-valuenow={percentage} aria-valuemin={0} aria-valuemax={100} aria-label={`${percentage}% read`}>
@@ -131,7 +136,7 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
         {showEstimate && daysRemaining !== null && (
           <p className="estimate-text">
               {isPageUnit
-                ? `Estimated ${daysRemaining} day${daysRemaining === 1 ? '' : 's'} remaining at ${Math.round(pagesPerDay)} page${Math.round(pagesPerDay) === 1 ? '' : 's'} a day.`
+                ? `Estimated ${daysRemaining} day${daysRemaining === 1 ? '' : 's'} remaining at ${formatPagesPerDay(pagesPerDay)} page${formatPagesPerDay(pagesPerDay) === '1' ? '' : 's'} a day.`
                 : `Estimated ${daysRemaining} day${daysRemaining === 1 ? '' : 's'} remaining at ${avgSpeedPerDay.toFixed(2)}% a day.`}
           </p>
         )}
