@@ -204,7 +204,10 @@ export default function App() {
   useEffect(() => {
     const saved = saveBooks(books);
     if (!saved) {
-      setSyncMessage('Could not save to this browser storage right now.');
+      const timeoutId = window.setTimeout(() => {
+        setSyncMessage('Could not save to this browser storage right now.');
+      }, 0);
+      return () => window.clearTimeout(timeoutId);
     }
   }, [books]);
 
