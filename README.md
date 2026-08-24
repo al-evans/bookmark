@@ -60,14 +60,33 @@ you do not have to deploy a second time.
 
 ### 3. Open your app and enter that password
 
-Bookmark asks for the password once and keeps it only in that browser. To
-read your list on your phone as well, enter the same password there.
+When the deploy finishes, Vercel shows your new address. It looks like
+`bookmark-a1b2c3.vercel.app`. You can find it again on the project page in
+Vercel under **Domains**.
+
+Open that address in any browser. Bookmark asks for the password once and
+keeps it only in that browser. To read your list on your phone as well, open
+the same address there and enter the same password.
+
+> **The address is public.** Anyone who has the link can reach the sign-in
+> screen, so your password is what keeps your reading list private. Pick a
+> long one.
 
 That is the whole required setup. Everything below is optional.
 
 > **Something missing?** If the app opens on a **Finish setup** screen, it is
 > telling you which of the two steps above did not complete. Fix it in Vercel,
 > then press **Check again**.
+
+### Put it on your phone home screen
+
+Bookmark is a progressive web app, so it can open like a normal app, with no
+browser bar.
+
+- **iPhone or iPad:** open the address in Safari, tap **Share**, then tap
+  **Add to Home Screen**.
+- **Android:** open the address in Chrome, tap the **⋮** menu, then tap
+  **Install app** or **Add to Home screen**.
 
 <details>
 <summary><b>Prefer to do it by hand?</b></summary>
