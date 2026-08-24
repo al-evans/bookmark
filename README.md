@@ -1,7 +1,7 @@
 <div align="center">
 
 <a href="https://al-evans.github.io/bookmark/">
-  <img src="docs/readme-banner.png" alt="Bookmark: the app icon and name beside two real app screens, one showing Project Hail Mary at 68 percent with a Log button, the other showing the finished books list with reading stats" width="100%">
+  <img src="docs/readme-banner.png" alt="Bookmark: the app icon and name beside two real app screens, one showing Project Hail Mary at 74 percent with a Log button, the other showing the finished books list with reading stats" width="100%">
 </a>
 
 Bookmark is a self-hosted reading tracker built with React + Vite for Vercel.
