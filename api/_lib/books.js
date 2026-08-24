@@ -33,6 +33,7 @@ export function normalizeBook(book) {
     dateRead: typeof book?.dateRead === 'string' && book.dateRead ? book.dateRead : null,
     progressLog,
     totalPages: totalPages && totalPages > 0 ? Math.round(totalPages) : null,
+    progressUnit: book?.progressUnit === 'pages' ? 'pages' : 'percent',
     currentPercent: Math.min(100, Math.max(0, toNumber(book?.currentPercent) ?? (progressLog.at(-1)?.currentPercent ?? 0))),
     timeZoneVersion: book?.timeZoneVersion === 'pt-v2' ? 'pt-v2' : 'legacy-utc',
   };

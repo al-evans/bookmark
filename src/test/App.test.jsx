@@ -474,6 +474,36 @@ describe('App', () => {
     expect(screen.getByRole('progressbar', { name: /45% read/i })).toBeInTheDocument();
   });
 
+  it('converts an in-progress value when switching units and persists the chosen unit', async () => {
+    await renderApp();
+    // Add a currently-reading book with a known page count
+    fireEvent.click(screen.getByRole('button', { name: /Add a new book/i }));
+    fireEvent.change(screen.getByLabelText(/Title \*/i), { target: { value: 'Dune' } });
+    fireEvent.change(screen.getByLabelText(/Total Pages/i), { target: { value: '400' } });
+    fireEvent.change(screen.getByLabelText(/Status/i), { target: { value: 'currently-reading' } });
+    fireEvent.click(screen.getByRole('button', { name: /Add Book/i }));
+
+    fireEvent.click(screen.getByRole('button', { name: /Open log entry for "Dune"/i }));
+    const percentInput = screen.getByLabelText(/Log current reading percentage for "Dune"/i);
+    fireEvent.change(percentInput, { target: { value: '50' } });
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Pages' }));
+
+    const pageInput = screen.getByLabelText(/Log current page for "Dune", out of 400 pages/i);
+    expect(pageInput).toHaveValue(200);
+
+    fireEvent.click(screen.getByRole('button', { name: /Save Log/i }));
+
+    expect(screen.getByText('Page 200 of 400')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const putCalls = fetchMock.mock.calls.filter(([url, init]) => url === '/api/books' && init?.method === 'PUT');
+      const lastCall = putCalls[putCalls.length - 1];
+      const savedDune = JSON.parse(lastCall[1].body).books.find((book) => book.title === 'Dune');
+      expect(savedDune?.progressUnit).toBe('pages');
+    });
+  });
+
   it('shows validation error for invalid progress percentage', async () => {
     await renderApp();
     fireEvent.click(screen.getByRole('button', { name: /Add a new book/i }));

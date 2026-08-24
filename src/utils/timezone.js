@@ -40,6 +40,9 @@ function dateKeyToStableUtcDate(dateKey) {
 }
 
 export function getPtDateKey(value = new Date()) {
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
+    return value.trim();
+  }
   const date = asValidDate(value);
   if (!date) return '';
   const parts = ptDateFormatter.formatToParts(date);

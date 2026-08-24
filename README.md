@@ -29,7 +29,7 @@ AI key for book search and reading tips.
 | **Books I've Read** | Everything you've finished, grouped by month and year |
 | **Want to Read** | A queue of what's next |
 | **Add books** | Manually, via Open Library search, or via AI search fallback |
-| **Progress tracking** | Log absolute progress (`0`–`100`) and keep the full history |
+| **Progress tracking** | Log by percentage or by page number, and keep the full history |
 | **Reading speed estimate** | Days remaining based on your logged pace |
 | **Daily push reminder** | Vercel Cron notifies your phone when you haven't logged today |
 | **Weekly private backup** | Optional GitHub Action snapshots your KV data to JSON |
@@ -303,6 +303,24 @@ flowchart LR
 `api/` runs in production on Vercel and `server/index.js` mirrors those routes
 for local dev. Shared logic lives in `api/_lib/` and is imported by both, so
 behavior stays consistent.
+
+<details>
+<summary><b>Percent or pages</b></summary>
+
+<br>
+
+Each book you are reading can be logged either way. Pick **Percent** or
+**Pages** in the log form; the choice is saved per book, so a physical book can
+track pages while an ebook stays on percent. **Pages** appears only when the
+book has a page count — add one from the book's **Edit** menu if it is missing.
+
+Percent stays the stored unit. A page entry is converted at full precision and
+is not rounded to a whole percent, which keeps the pace estimate honest: on a
+1200 page book a single percent is 12 pages, so a whole-percent log hides
+several days of steady reading. Page numbers convert back exactly, so what you
+type is what you see.
+
+</details>
 
 <details>
 <summary><b>API routes</b></summary>
