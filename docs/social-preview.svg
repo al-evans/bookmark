@@ -1,31 +1,73 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">Bookmark social preview</title>
-  <desc id="desc">Minimal Bookmark social preview with the app icon, headline, and a static reading progress card.</desc>
-  <rect width="1200" height="630" fill="#FFFFFF"/>
-  <rect x="24" y="24" width="1152" height="582" rx="36" stroke="#E2E8F0" stroke-width="2"/>
+  <desc id="desc">The Bookmark wordmark above the headline "Track your reading." beside a phone showing Project Hail Mary at 68 percent.</desc>
 
-  <g transform="translate(84 92)">
-    <rect width="88" height="88" rx="22" fill="#EFF6FF"/>
-    <path d="M29 19a4 4 0 0 1 4-4h22a4 4 0 0 1 4 4v52L44 60 29 71V19z" fill="#0F172A"/>
-    <path d="M44 31l3.2 6.5 7.1 1-5.1 5 1.2 7.1-6.4-3.4-6.4 3.4 1.2-7.1-5.1-5 7.1-1L44 31z" fill="#EFF6FF"/>
+  <rect width="1200" height="630" fill="#F1F5F9"/>
+  <rect x="32" y="32" width="1136" height="566" rx="32" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+
+  <!-- Wordmark: the same tile, bookmark, and star the site header draws. -->
+  <g transform="translate(88 84) scale(0.395833)">
+    <rect width="192" height="192" rx="40" fill="#0F172A"/>
+    <path d="M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z" fill="#EFF6FF"/>
+    <polygon points="96,63.4 104.0,80.2 122.4,82.6 109.2,95.2 112.4,113.4 96,104.8 79.6,113.4 82.8,95.2 69.6,82.6 88.0,80.2" fill="#0F172A"/>
   </g>
+  <text x="182" y="139" fill="#0F172A" font-size="44" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="850" letter-spacing="-1.4">Bookmark</text>
 
-  <text x="84" y="266" fill="#0F172A" font-size="86" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="850" letter-spacing="-6">Track your</text>
-  <text x="84" y="354" fill="#0F172A" font-size="86" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="850" letter-spacing="-6">reading.</text>
-  <text x="88" y="426" fill="#475569" font-size="30" font-family="Inter, Segoe UI, Arial, sans-serif">Self-hosted on Vercel. Free by default.</text>
-  <text x="88" y="470" fill="#475569" font-size="30" font-family="Inter, Segoe UI, Arial, sans-serif">Optional bring-your-own AI.</text>
+  <text x="88" y="232" fill="#1D4ED8" font-size="19" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="800" letter-spacing="3.4">SELF-HOSTED READING TRACKER</text>
 
-  <g transform="translate(776 160)">
-    <rect width="316" height="260" rx="28" fill="#F8FAFC" stroke="#E2E8F0"/>
-    <text x="24" y="54" fill="#0F172A" font-size="24" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="850">My Reading Goals</text>
-    <circle cx="270" cy="42" r="24" fill="#1D4ED8"/>
-    <path d="M270 30v24M258 42h24" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
-    <rect x="24" y="90" width="268" height="118" rx="16" fill="#FFFFFF" stroke="#E2E8F0"/>
-    <rect x="40" y="108" width="52" height="78" rx="6" fill="#1D4ED8"/>
-    <text x="108" y="136" fill="#0F172A" font-size="21" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="850">Project Hail Mary</text>
-    <text x="108" y="164" fill="#475569" font-size="16" font-family="Inter, Segoe UI, Arial, sans-serif">by Andy Weir</text>
-    <rect x="108" y="180" width="118" height="7" rx="3.5" fill="#E2E8F0"/>
-    <rect x="108" y="180" width="80" height="7" rx="3.5" fill="#1D4ED8"/>
-    <text x="238" y="188" fill="#1E40AF" font-size="15" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="850">68%</text>
-  </g>
+  <text x="88" y="322" fill="#0F172A" font-size="80" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="850" letter-spacing="-3.2">Track your</text>
+  <text x="88" y="404" fill="#0F172A" font-size="80" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="850" letter-spacing="-3.2">reading.</text>
+
+  <text x="90" y="470" fill="#334155" font-size="25" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif">Deploy a private copy on Vercel.</text>
+  <text x="90" y="506" fill="#334155" font-size="25" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif">Use it free by default. Add AI only if you want it.</text>
+
+  <!-- Phone, matching the dark bezel in the site hero. -->
+  <rect x="790" y="76" width="312" height="478" rx="44" fill="#0F172A"/>
+  <rect x="802" y="88" width="288" height="454" rx="34" fill="#F1F5F9"/>
+
+  <path d="M802 122a34 34 0 0 1 34-34h220a34 34 0 0 1 34 34v42H802v-42z" fill="#0F172A"/>
+  <text x="824" y="135" fill="#FFFFFF" font-size="17" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="850">My Reading Goals</text>
+  <circle cx="1062" cy="129" r="14" stroke="#FFFFFF" stroke-width="2.4"/>
+  <path d="M1062 122v14M1055 129h14" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/>
+  <rect x="802" y="164" width="288" height="3" fill="#1D4ED8"/>
+
+  <text x="822" y="198" fill="#0F172A" font-size="14" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="850">Currently Reading</text>
+  <text x="956" y="198" fill="#64748B" font-size="12.5" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif">(1)</text>
+
+  <rect x="816" y="212" width="260" height="168" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+
+  <rect x="830" y="228" width="44" height="64" rx="4" fill="#1C1917"/>
+  <circle cx="852" cy="252" r="13" fill="#EA580C"/>
+  <rect x="830" y="278" width="44" height="14" fill="#7C2D12"/>
+
+  <text x="886" y="247" fill="#0F172A" font-size="15" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="850">Project Hail Mary</text>
+  <text x="886" y="268" fill="#475569" font-size="12.5" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif">by Andy Weir</text>
+  <rect x="886" y="280" width="128" height="6" rx="3" fill="#E2E8F0"/>
+  <rect x="886" y="280" width="87" height="6" rx="3" fill="#1D4ED8"/>
+  <text x="1022" y="287" fill="#1D4ED8" font-size="12.5" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="850">68%</text>
+
+  <text x="830" y="320" fill="#475569" font-size="11.5" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif">Estimated 7 days remaining.</text>
+
+  <rect x="830" y="336" width="232" height="30" rx="9" fill="#0F172A"/>
+  <text x="946" y="356" fill="#FFFFFF" font-size="13" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="850" text-anchor="middle">Log</text>
+
+  <!-- Bottom nav, so the phone reads as the real app rather than a cropped card. -->
+  <path d="M802 478H1090v30a34 34 0 0 1-34 34H836a34 34 0 0 1-34-34v-30z" fill="#FFFFFF"/>
+  <rect x="802" y="478" width="288" height="1.5" fill="#E2E8F0"/>
+
+  <rect x="812" y="486" width="52" height="46" rx="12" fill="#1D4ED8"/>
+  <path d="M831 494h6a2 2 0 0 1 2 2v10h-8a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2zM845 494h-6a2 2 0 0 0-2 2v10h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2z" fill="#FFFFFF"/>
+  <text x="838" y="524" fill="#FFFFFF" font-size="7.5" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="800" text-anchor="middle">Currently</text>
+
+  <path d="M905 493h10a1.5 1.5 0 0 1 1.5 1.5v12l-6.5-4-6.5 4v-12A1.5 1.5 0 0 1 905 493z" fill="#64748B"/>
+  <text x="910" y="524" fill="#64748B" font-size="7.5" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="800" text-anchor="middle">Want to Read</text>
+
+  <circle cx="982" cy="499" r="7.5" stroke="#64748B" stroke-width="2"/>
+  <path d="M978.5 499l2.5 2.5 4.5-4.5" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="982" y="524" fill="#64748B" font-size="7.5" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="800" text-anchor="middle">Finished</text>
+
+  <path d="M1046 495h16M1046 503h16" stroke="#64748B" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="1052" cy="495" r="2.6" fill="#FFFFFF" stroke="#64748B" stroke-width="2"/>
+  <circle cx="1058" cy="503" r="2.6" fill="#FFFFFF" stroke="#64748B" stroke-width="2"/>
+  <text x="1054" y="524" fill="#64748B" font-size="7.5" font-family="Inter, Segoe UI, system-ui, Arial, sans-serif" font-weight="800" text-anchor="middle">Settings</text>
 </svg>
