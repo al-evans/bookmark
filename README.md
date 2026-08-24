@@ -24,7 +24,7 @@ AI key for book search and reading tips.
 
 ## Features
 
-| | |
+| Feature | What it does |
 |---|---|
 | **Books I've Read** | Everything you've finished, grouped by month and year |
 | **Want to Read** | A queue of what's next |

@@ -43,7 +43,7 @@
         --ink: #0f172a;
         --muted: #334155;
         --line: #e2e8f0;
-        --surface: #ffffff;
+        --surface: #f1f5f9;
         --surface-2: #f8fafc;
         --on-blue: #ffffff;
         --icon-tile: #0f172a;
@@ -52,7 +52,9 @@
         --space: 8px;
         --gutter: clamp(16px, 4.5vw, 32px);
         --radius: 20px;
-        --focus: 0 0 0 3px rgba(29, 78, 216, 0.32);
+        /* Opaque so the ring keeps 3:1 contrast against the surface.
+           It reads var(--blue), so dark mode needs no second value. */
+        --focus: 0 0 0 3px var(--blue);
       }
 
       @media (prefers-color-scheme: dark) {
@@ -70,7 +72,6 @@
           --icon-tile: #eff6ff;
           --icon-mark: #0f172a;
           --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-          --focus: 0 0 0 3px rgba(96, 165, 250, 0.45);
         }
       }
 
@@ -197,6 +198,16 @@
         width: 100%;
       }
 
+      /* The media box hides overflow, so the video's own ring would be
+         clipped. Draw the ring on the container instead. */
+      .hero-media:has(.hero-video:focus-visible) {
+        box-shadow: var(--focus), var(--shadow);
+      }
+
+      .hero-video:focus-visible {
+        box-shadow: none;
+      }
+
       .hero-media[data-loading="true"]::after {
         background: linear-gradient(100deg, transparent 20%, rgba(148, 163, 184, 0.22) 50%, transparent 80%);
         animation: shimmer 1.4s linear infinite;
@@ -224,7 +235,7 @@
 
       .eyebrow {
         color: var(--blue);
-        font-size: 0.8rem;
+        font-size: clamp(0.75rem, 0.72rem + 0.14vw, 0.85rem);
         font-weight: 850;
         letter-spacing: 0.12em;
         margin: 0;
@@ -260,7 +271,7 @@
         border: 1px solid transparent;
         border-radius: 999px;
         display: inline-flex;
-        font-size: 1rem;
+        font-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.06rem);
         font-weight: 800;
         justify-content: center;
         min-height: 48px;
@@ -301,7 +312,7 @@
       }
 
       footer small {
-        font-size: 0.78rem;
+        font-size: clamp(0.74rem, 0.72rem + 0.1vw, 0.82rem);
         margin: 0;
       }
 
@@ -310,7 +321,7 @@
         border-radius: 999px;
         color: var(--ink);
         display: inline-flex;
-        font-size: 0.92rem;
+        font-size: clamp(0.88rem, 0.85rem + 0.13vw, 0.98rem);
         font-weight: 750;
         gap: calc(var(--space) * 1);
         min-height: 48px;
@@ -443,12 +454,20 @@
 
       // Pause off-screen playback to save battery and data.
       if ("IntersectionObserver" in window) {
+        // Only resume what the observer paused, so an explicit pause sticks.
+        let pausedByObserver = false;
         new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (reducedMotion.matches) return;
-              if (entry.isIntersecting) video.play().catch(() => {});
-              else video.pause();
+              if (entry.isIntersecting) {
+                if (!pausedByObserver) return;
+                pausedByObserver = false;
+                video.play().catch(() => {});
+              } else if (!video.paused) {
+                pausedByObserver = true;
+                video.pause();
+              }
             });
           },
           { threshold: 0.25 },
