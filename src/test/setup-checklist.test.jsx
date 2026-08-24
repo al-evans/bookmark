@@ -21,7 +21,7 @@ describe('SetupChecklist', () => {
   it('refreshes setup status before retrying books', async () => {
     fetchMock
       .mockResolvedValueOnce(healthResponse({ storage: false, password: false, complete: false }))
-      .mockResolvedValueOnce(healthResponse({ storage: true, password: false, complete: false }));
+      .mockResolvedValueOnce(healthResponse({ storage: true, password: true, complete: true }));
     const onRetry = vi.fn(async () => {});
 
     render(<SetupChecklist onRetry={onRetry} />);
@@ -38,8 +38,29 @@ describe('SetupChecklist', () => {
       expect(onRetry).toHaveBeenCalledTimes(1);
     });
     expect(fetchMock.mock.invocationCallOrder[1]).toBeLessThan(onRetry.mock.invocationCallOrder[0]);
-    expect(screen.getByText('Done')).toBeInTheDocument();
+    expect(screen.getAllByText('Done')).toHaveLength(2);
+  });
+
+  it('updates partial setup progress without retrying books', async () => {
+    fetchMock
+      .mockResolvedValueOnce(healthResponse({ storage: false, password: false, complete: false }))
+      .mockResolvedValueOnce(healthResponse({ storage: true, password: false, complete: false }));
+    const onRetry = vi.fn(async () => {});
+
+    render(<SetupChecklist onRetry={onRetry} />);
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Check again/i }));
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(screen.getByText('Done')).toBeInTheDocument();
+    });
     expect(screen.getAllByText('To do')).toHaveLength(1);
+    expect(onRetry).not.toHaveBeenCalled();
   });
 
   it('does not retry books when setup status cannot be refreshed', async () => {

@@ -31,8 +31,11 @@ export default function SetupChecklist({ onRetry }) {
   const handleRetry = async () => {
     setFailed(false);
     try {
-      setSetup(await fetchSetupStatus());
-      await onRetry();
+      const next = await fetchSetupStatus();
+      setSetup(next);
+      if (next?.complete) {
+        await onRetry();
+      }
     } catch {
       setFailed(true);
     }
