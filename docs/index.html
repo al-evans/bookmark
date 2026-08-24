@@ -46,6 +46,8 @@
         --surface: #ffffff;
         --surface-2: #f8fafc;
         --on-blue: #ffffff;
+        --icon-tile: #0f172a;
+        --icon-mark: #eff6ff;
         --shadow: 0 24px 60px rgba(15, 23, 42, 0.1);
         --space: 8px;
         --gutter: clamp(16px, 4.5vw, 32px);
@@ -65,6 +67,8 @@
           --surface: #0f172a;
           --surface-2: #131f37;
           --on-blue: #0b1220;
+          --icon-tile: #eff6ff;
+          --icon-mark: #0f172a;
           --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
           --focus: 0 0 0 3px rgba(96, 165, 250, 0.45);
         }
@@ -149,7 +153,6 @@
 
       .brand-mark {
         align-items: center;
-        background: var(--blue-soft);
         border-radius: 14px;
         display: inline-flex;
         height: 44px;
@@ -355,9 +358,9 @@
         <header class="brand">
           <span class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="192" height="192" rx="40" fill="#eff6ff" />
-              <path d="M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z" fill="#0f172a" />
-              <polygon points="96,68 102.7,82 118,84 107,94.5 109.7,109.7 96,102.5 82.3,109.7 85,94.5 74,84 89.3,82" fill="#eff6ff" />
+              <rect width="192" height="192" rx="40" fill="var(--icon-tile)" />
+              <path d="M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z" fill="var(--icon-mark)" />
+              <polygon points="96,63.4 104.0,80.2 122.4,82.6 109.2,95.2 112.4,113.4 96,104.8 79.6,113.4 82.8,95.2 69.6,82.6 88.0,80.2" fill="var(--icon-tile)" />
             </svg>
           </span>
           <span class="brand-name">Bookmark</span>
