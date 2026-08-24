@@ -28,6 +28,16 @@ export default function SetupChecklist({ onRetry }) {
     return () => { active = false; };
   }, []);
 
+  const handleRetry = async () => {
+    setFailed(false);
+    try {
+      setSetup(await fetchSetupStatus());
+    } catch {
+      setFailed(true);
+    }
+    await onRetry();
+  };
+
   return (
     <div className="setup-check">
       <ol className="setup-check__list">
@@ -60,7 +70,7 @@ export default function SetupChecklist({ onRetry }) {
         </p>
       )}
 
-      <button type="button" className="btn-primary setup-check__retry" onClick={onRetry}>
+      <button type="button" className="btn-primary setup-check__retry" onClick={handleRetry}>
         Check again
       </button>
     </div>

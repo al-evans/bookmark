@@ -41,7 +41,7 @@ You do not need a terminal. The default path stays free: Vercel Hobby for
 hosting, a free Upstash Redis store for your books, and no AI key unless you
 want one.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fal-evans%2Fbookmark&project-name=bookmark&repository-name=bookmark&env=APP_PASSWORD&envDescription=Pick%20a%20password%20that%20unlocks%20your%20reading%20list.%20Bookmark%20asks%20for%20it%20once%2C%20then%20keeps%20it%20only%20in%20your%20browser.%20Any%20long%20phrase%20works.&envLink=https%3A%2F%2Fal-evans.github.io%2Fbookmark%2F%23password&stores=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22upstash%22%2C%22productSlug%22%3A%22redis%22%2C%22protocol%22%3A%22storage%22%7D%5D)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fal-evans%2Fbookmark&project-name=bookmark&repository-name=bookmark&env=APP_PASSWORD&envDescription=Pick%20a%20password%20that%20unlocks%20your%20reading%20list.%20Bookmark%20asks%20for%20it%20once%2C%20then%20keeps%20it%20only%20in%20your%20browser.%20Any%20long%20phrase%20works.&envLink=https%3A%2F%2Fal-evans.github.io%2Fbookmark%2F%23password&products=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22upstash%22%2C%22productSlug%22%3A%22upstash-kv%22%2C%22protocol%22%3A%22storage%22%7D%5D)
 
 ### 1. Click the button
 
