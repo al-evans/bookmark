@@ -1,34 +1,26 @@
 <div align="center">
 
-![Bookmark](docs/readme-banner.svg)
-
-### Track your reading. Own your data.
+<a href="https://al-evans.github.io/bookmark/">
+  <img src="docs/readme-banner.png" alt="Bookmark: the app icon and name beside two real app screens, one showing Project Hail Mary at 68 percent with a Log button, the other showing the finished books list with reading stats" width="100%">
+</a>
 
 Bookmark is a self-hosted reading tracker built with React + Vite for Vercel.
 Log books, track progress, see finished stats, and optionally bring your own
 AI key for book search and reading tips.
 
-**No hosted service. No shared AI key. No required paid plan.**
+**Own your data.** No hosted service, no shared AI key, no required paid plan.
 
 [![CI](https://github.com/al-evans/bookmark/actions/workflows/ci.yml/badge.svg)](https://github.com/al-evans/bookmark/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[**Setup guide**](https://al-evans.github.io/bookmark/) ·
+[**▶ Watch the demo**](https://al-evans.github.io/bookmark/) ·
 [**Deploy your own**](#deploy-your-own) ·
 [**Bring your own AI**](#bring-your-own-ai)
 
 </div>
 
 ---
-
-## Demo
-
-<a href="https://al-evans.github.io/bookmark/">
-  <img src="docs/bookmark-demo-poster.jpg" alt="Bookmark app demo: logging reading progress, saving a book to read next, and reviewing finished books" width="100%">
-</a>
-
-<div align="center"><sub><a href="https://al-evans.github.io/bookmark/">▶ Watch the demo</a></sub></div>
 
 ## Features
 
