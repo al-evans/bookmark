@@ -44,7 +44,12 @@ export function calcAvgSpeedPercentPerDay(logs = []) {
       Math.round((currentTimestamp - previousTimestamp) / 86400000),
     );
 
-    if (delta > 0) {
+    // A day you read but barely moved is still a day of reading. Counting only
+    // the intervals that advanced would drop the slow stretches out of the
+    // denominator and overstate your pace, which matters most on long books
+    // where a whole percent is many pages. Intervals that go backwards are
+    // corrections rather than reading, so those stay excluded.
+    if (delta >= 0) {
       totalDelta += delta;
       totalDays += days;
     }
@@ -56,4 +61,35 @@ export function calcAvgSpeedPercentPerDay(logs = []) {
 export function estimateDaysRemaining(currentPercent, avgSpeedPerDay) {
   if (avgSpeedPerDay <= 0 || currentPercent >= 100) return null;
   return Math.ceil((100 - currentPercent) / avgSpeedPerDay);
+}
+
+export const PROGRESS_UNITS = ['percent', 'pages'];
+
+export function getTotalPages(book) {
+  const total = Number(book?.totalPages);
+  return Number.isFinite(total) && total > 0 ? Math.round(total) : null;
+}
+
+/** Pages are only offered when we know how many there are to count towards. */
+export function resolveProgressUnit(book) {
+  return book?.progressUnit === 'pages' && getTotalPages(book) ? 'pages' : 'percent';
+}
+
+/**
+ * Percent stays the stored unit, so a page entry is kept at full precision
+ * rather than rounded to a whole percent. On a 1200 page book a whole percent
+ * is 12 pages, and that lost detail is what skews the pace estimate.
+ */
+export function pagesToPercent(page, totalPages) {
+  const total = Number(totalPages);
+  const value = Number(page);
+  if (!Number.isFinite(total) || total <= 0 || !Number.isFinite(value)) return null;
+  return Math.min(100, Math.max(0, (value / total) * 100));
+}
+
+export function percentToPages(percent, totalPages) {
+  const total = Number(totalPages);
+  const value = Number(percent);
+  if (!Number.isFinite(total) || total <= 0 || !Number.isFinite(value)) return null;
+  return Math.min(total, Math.max(0, Math.round((value / 100) * total)));
 }

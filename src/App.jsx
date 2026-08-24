@@ -456,7 +456,7 @@ export default function App() {
     setActiveTab('reading');
   };
 
-  const handleLogProgress = (id, currentPercent) => {
+  const handleLogProgress = (id, currentPercent, progressUnit) => {
     const today = getTodayPtDateKey();
     const loggedAt = new Date().toISOString();
     setBooks((prev) =>
@@ -469,10 +469,20 @@ export default function App() {
           existing >= 0
             ? log.map((e, i) => (i === existing ? { date: loggedAt, currentPercent } : e))
             : [...log, { date: loggedAt, currentPercent }];
-        return { ...b, progressLog: newLog, currentPercent };
+        return {
+          ...b,
+          progressLog: newLog,
+          currentPercent,
+          progressUnit: progressUnit === 'pages' ? 'pages' : 'percent',
+        };
       })
     );
     triggerHapticFeedback();
+  };
+
+  const handleSetProgressUnit = (id, progressUnit) => {
+    const unit = progressUnit === 'pages' ? 'pages' : 'percent';
+    setBooks((prev) => prev.map((b) => (b.id === id ? { ...b, progressUnit: unit } : b)));
   };
 
   const handleMarkRead = (id) => {
@@ -771,6 +781,7 @@ export default function App() {
                 <CurrentlyReadingList
                   books={books}
                   onLogProgress={handleLogProgress}
+                  onSetProgressUnit={handleSetProgressUnit}
                   onMarkRead={handleMarkRead}
                   onDelete={handleDelete}
                   onEditPageCount={handleEditPageCount}

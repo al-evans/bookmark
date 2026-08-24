@@ -705,6 +705,78 @@ body {
   margin-top: 0.375rem;
 }
 
+/* Pages read so far, shown under the bar when the book is tracked by page. */
+.progress-pages {
+  margin-top: 0.25rem;
+  font-size: clamp(0.8rem, 0.76rem + 0.2vw, 0.875rem);
+  font-weight: 600;
+  color: var(--gray-600);
+}
+
+/* Percent / Pages switch. Mirrors .settings-segmented, but every target keeps
+   the 48px minimum because this one sits inside a dense card. */
+.progress-unit {
+  display: flex;
+  gap: 0;
+  border-radius: 999px;
+  border: 1px solid var(--gray-200);
+  padding: 4px;
+  background: var(--gray-100);
+}
+
+.progress-unit__item {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--gray-600);
+  padding: 0.45rem 0.6rem;
+  font-size: clamp(0.8rem, 0.76rem + 0.2vw, 0.85rem);
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  min-height: 48px;
+  touch-action: manipulation;
+  transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.progress-unit__item:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.progress-unit__item--active {
+  background: var(--white);
+  color: var(--black);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+
+.progress-unit__hint {
+  font-size: clamp(0.8rem, 0.76rem + 0.2vw, 0.875rem);
+  line-height: 1.35;
+  color: var(--gray-600);
+}
+
+.progress-unit__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.progress-unit__link:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 .progress-form__actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2028,6 +2100,38 @@ form select:focus {
   background: #0f172a;
   color: #f1f5f9;
   border-color: #334155;
+}
+
+[data-theme="dark"] .progress-pages {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .progress-unit {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .progress-unit__item {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .progress-unit__item--active {
+  background: #334155;
+  color: #f8fafc;
+  box-shadow: 0 1px 3px rgba(2, 6, 23, 0.5);
+}
+
+[data-theme="dark"] .progress-unit__item:focus-visible,
+[data-theme="dark"] .progress-unit__link:focus-visible {
+  outline-color: #60a5fa;
+}
+
+[data-theme="dark"] .progress-unit__hint {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .progress-unit__link {
+  color: #60a5fa;
 }
 
 [data-theme="dark"] .progress-input:focus {
