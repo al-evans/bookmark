@@ -191,7 +191,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+Open `http://localhost:5173` in your browser.
 
 `npm run dev` starts the Vite frontend on `:5173` and a local Express API on
 `:8787` that mirrors the Vercel routes. Locally, books are stored in
@@ -199,10 +199,22 @@ Open [http://localhost:5173](http://localhost:5173).
 
 ### Test from your phone on the same network
 
-1. Find your computer's LAN IP (for example `192.168.1.42`).
-2. Add it to `ALLOWED_ORIGINS` in `.env`: `http://192.168.1.42:5173`.
+1. Find your computer's LAN IP:
+
+   ```bash
+   ipconfig getifaddr en0    # macOS
+   hostname -I               # Linux
+   ipconfig                  # Windows
+   ```
+
+2. Add that address to `ALLOWED_ORIGINS` in `.env`:
+
+   ```bash
+   ALLOWED_ORIGINS=http://localhost:5173,http://YOUR_LAN_IP:5173
+   ```
+
 3. Run `npm run dev`.
-4. On your phone, open `http://192.168.1.42:5173`.
+4. On your phone, open `http://YOUR_LAN_IP:5173`.
 
 Both devices talk to the same backend, so your library stays in sync.
 
