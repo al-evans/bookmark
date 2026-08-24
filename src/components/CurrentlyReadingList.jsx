@@ -53,6 +53,7 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
   const daysRemaining = showEstimate ? estimateDaysRemaining(currentPct, avgSpeedPerDay) : null;
   const showCoverSkeleton = !book.coverUrl && book.enrichmentStatus === 'pending';
   const pagesPerDay = totalPages !== null ? (avgSpeedPerDay / 100) * totalPages : null;
+  const pagesPerDayLabel = pagesPerDay !== null ? formatPagesPerDay(pagesPerDay) : null;
 
   // Today's entry is overwritten rather than appended, so a same-day typo can be
   // corrected downward. Earlier days stay the floor.
@@ -136,7 +137,7 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
         {showEstimate && daysRemaining !== null && (
           <p className="estimate-text">
               {isPageUnit
-                ? `Estimated ${daysRemaining} day${daysRemaining === 1 ? '' : 's'} remaining at ${formatPagesPerDay(pagesPerDay)} page${formatPagesPerDay(pagesPerDay) === '1' ? '' : 's'} a day.`
+                ? `Estimated ${daysRemaining} day${daysRemaining === 1 ? '' : 's'} remaining at ${pagesPerDayLabel} page${pagesPerDayLabel === '1' ? '' : 's'} a day.`
                 : `Estimated ${daysRemaining} day${daysRemaining === 1 ? '' : 's'} remaining at ${avgSpeedPerDay.toFixed(2)}% a day.`}
           </p>
         )}
