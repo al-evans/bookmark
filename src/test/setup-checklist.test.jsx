@@ -41,4 +41,24 @@ describe('SetupChecklist', () => {
     expect(screen.getByText('Done')).toBeInTheDocument();
     expect(screen.getAllByText('To do')).toHaveLength(1);
   });
+
+  it('does not retry books when setup status cannot be refreshed', async () => {
+    fetchMock
+      .mockResolvedValueOnce(healthResponse({ storage: false, password: false, complete: false }))
+      .mockRejectedValueOnce(new Error('health unavailable'));
+    const onRetry = vi.fn(async () => {});
+
+    render(<SetupChecklist onRetry={onRetry} />);
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Check again/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/The setup check did not answer/i)).toBeInTheDocument();
+    });
+    expect(onRetry).not.toHaveBeenCalled();
+  });
 });

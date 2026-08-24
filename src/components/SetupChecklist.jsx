@@ -32,10 +32,10 @@ export default function SetupChecklist({ onRetry }) {
     setFailed(false);
     try {
       setSetup(await fetchSetupStatus());
+      await onRetry();
     } catch {
       setFailed(true);
     }
-    await onRetry();
   };
 
   return (
