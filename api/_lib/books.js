@@ -57,12 +57,29 @@ export function normalizeBooksPayload(payload) {
   return uniqueBooks;
 }
 
+// Vercel's Upstash integration injects KV_REST_API_*, while a store connected
+// straight from Upstash injects UPSTASH_REDIS_REST_*. Both speak the same REST
+// API, so accept either pair rather than depending on which path was used.
+export function getKvCredentials() {
+  const apiUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '';
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '';
+  return { apiUrl, token };
+}
+
+export function isKvConfigured() {
+  const { apiUrl, token } = getKvCredentials();
+  return Boolean(apiUrl && token);
+}
+
 export async function kvCommand(command) {
-  const apiUrl = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
+  const { apiUrl, token } = getKvCredentials();
 
   if (!apiUrl || !token) {
-    throw new Error('KV is not configured. Add KV_REST_API_URL and KV_REST_API_TOKEN.');
+    const error = new Error(
+      'Storage is not connected. Add a Redis store to this Vercel project.'
+    );
+    error.code = 'KV_NOT_CONFIGURED';
+    throw error;
   }
 
   const response = await fetch(apiUrl, {

@@ -1,3 +1,21 @@
+import { isAiConfigured } from './_lib/aiProvider.js';
+import { isAppAuthConfigured } from './_lib/appAuth.js';
+import { isKvConfigured } from './_lib/books.js';
+
+// Booleans only. This route is unauthenticated so the app can render a setup
+// checklist before anyone can sign in, so it must never return a value —
+// only whether each piece has been filled in.
 export default function handler(_req, res) {
-  return res.status(200).json({ ok: true });
+  const storage = isKvConfigured();
+  const password = isAppAuthConfigured();
+
+  return res.status(200).json({
+    ok: true,
+    setup: {
+      storage,
+      password,
+      ai: isAiConfigured(),
+      complete: storage && password,
+    },
+  });
 }
