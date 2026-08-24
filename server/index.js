@@ -325,13 +325,15 @@ app.use((req, res, next) => {
 
 app.get('/api/health', (_req, res) => {
   // Local development stores books in a file, so storage is always ready here.
+  const storage = true;
+  const password = isAppAuthConfigured();
   res.json({
     ok: true,
     setup: {
-      storage: true,
-      password: isAppAuthConfigured(),
+      storage,
+      password,
       ai: isAiConfigured(),
-      complete: true,
+      complete: storage && password,
     },
   });
 });
