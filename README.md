@@ -97,8 +97,8 @@ browser bar.
 2. Import the fork at [vercel.com/new](https://vercel.com/new). The framework
    preset, build command, and output directory already come from
    [vercel.json](vercel.json).
-3. In the project, open **Storage → Create Database → Redis** and choose the
-   free Upstash plan. Vercel injects `KV_REST_API_URL` and `KV_REST_API_TOKEN`.
+3. In the project, open **Storage → Create Database → Upstash Redis** and choose
+   the free plan. Vercel injects the REST URL and token for you.
 4. In **Settings → Environment Variables**, add `APP_PASSWORD`. Generate a
    strong value with `openssl rand -base64 24` if you like.
 5. Redeploy, because the first build ran before those values existed.
@@ -112,8 +112,8 @@ browser bar.
 
 | Variable | Required | Default | What it does |
 |---|---|---|---|
-| `KV_REST_API_URL` | ✅ | — | Vercel KV endpoint (auto-injected) |
-| `KV_REST_API_TOKEN` | ✅ | — | Vercel KV token (auto-injected) |
+| `KV_REST_API_URL` | ✅ | — | Redis REST endpoint (auto-injected). `UPSTASH_REDIS_REST_URL` also works. |
+| `KV_REST_API_TOKEN` | ✅ | — | Redis REST token (auto-injected). `UPSTASH_REDIS_REST_TOKEN` also works. |
 | `APP_PASSWORD` | ✅ on Vercel | — | Shared password that protects your deployed app |
 | `AI_PROVIDER` | — | `google` | `google`, `openai`, or `anthropic` |
 | `AI_API_KEY` | — | — | Your AI provider key; enables AI features |
