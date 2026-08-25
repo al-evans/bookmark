@@ -108,6 +108,33 @@ external files from an SVG, so a relative link shows a broken image.
 5. Measure `getBoundingClientRect()` on each `<text>` node. Overlapping text is
    easy to miss by eye.
 
+### The README banner is shared with the private repo
+
+`docs/readme-banner.svg` and the banner in the private `reading-app` repo are
+the same picture with a different wordmark and URL. They were allowed to drift
+apart once, and the private one ended up hand-drawn in the wrong typeface. Build
+both from one script so that cannot happen again, and check that the base64
+payloads come out byte-identical.
+
+The two screens are not both taken from `docs/demo/`:
+
+| Screen | Box | Source |
+|---|---|---|
+| A, left | `x 701 y 107 w 216 h 288` | a one-off capture of Currently Reading at 74 percent, with the Log button showing |
+| B, right | `x 920 y 56 w 228 h 339` | `docs/demo/scene-5.webp`, the reading stats |
+
+Screen A is not `scene-3.webp`. Scene 3 has the progress history sheet open, so
+it hides the Log button the banner is meant to show. Seed the 74 percent state
+and capture the plain Currently Reading screen instead.
+
+Embed each screen at exactly twice its box width, so 432 and 456 px. The PNG
+renders at 2400x720, which is twice the 1200 viewBox, so a 2x embed lands
+pixel-for-pixel. Do not downscale the finished PNG to 1200x360; that throws away
+half the resolution on high-density screens.
+
+Neither screen may show the Percent and Pages toggle. That feature exists in
+this repo only, so a screen that shows it cannot be reused in the private repo.
+
 ### To rebuild the hero demo
 
 The landing page hero is HTML, not a video. It shows the same seven scenes,
