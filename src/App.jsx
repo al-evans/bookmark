@@ -709,7 +709,7 @@ export default function App() {
     <div className={`app ${isStandalone ? 'app--standalone' : ''}`}>
       <header className="app-header">
         <div className="header-content">
-          <h1>My Reading Goals</h1>
+          <h1>Bookmark</h1>
           <button
             className="btn-add btn-add--icon header-add-btn"
             onClick={() => setShowForm(true)}

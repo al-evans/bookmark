@@ -108,13 +108,17 @@ external files from an SVG, so a relative link shows a broken image.
 5. Measure `getBoundingClientRect()` on each `<text>` node. Overlapping text is
    easy to miss by eye.
 
-### The README banner is shared with the private repo
+### The README banner shares a layout with the private repo
 
-`docs/readme-banner.svg` and the banner in the private `reading-app` repo are
-the same picture with a different wordmark and URL. They were allowed to drift
-apart once, and the private one ended up hand-drawn in the wrong typeface. Build
-both from one script so that cannot happen again, and check that the base64
-payloads come out byte-identical.
+`docs/readme-banner.svg` and the banner in the private `reading-app` repo use
+the same layout, typeface, palette and copy. They were allowed to drift apart
+once, and the private one ended up hand-drawn in the wrong typeface. Generate
+both from one template so that cannot happen again.
+
+**Share the template, not the screenshots.** The two apps show a different name
+in their own header: this one says "Bookmark", the private one says "My Reading
+Goals". A screenshot therefore belongs to exactly one repo, and each repo has to
+capture its own screens from its own running app.
 
 The two screens are not both taken from `docs/demo/`:
 
@@ -132,8 +136,12 @@ renders at 2400x720, which is twice the 1200 viewBox, so a 2x embed lands
 pixel-for-pixel. Do not downscale the finished PNG to 1200x360; that throws away
 half the resolution on high-density screens.
 
-Neither screen may show the Percent and Pages toggle. That feature exists in
-this repo only, so a screen that shows it cannot be reused in the private repo.
+### Alt text can go stale on its own
+
+Some `alt` text on the landing page quotes numbers that the app calculates from
+today's date, such as "29.6 days a book" on scene 5. That figure moves as real
+time passes, even when nothing in the app changes. Read the value off the new
+screenshot every time you recapture, and correct the `alt` text to match.
 
 ### To rebuild the hero demo
 

@@ -179,7 +179,7 @@ beforeEach(() => {
 describe('App', () => {
   it('renders the app header', async () => {
     await renderApp();
-    expect(screen.getByRole('heading', { name: /My Reading Goals/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Bookmark/i })).toBeInTheDocument();
   });
 
   it('sends the stored app password when loading shared books', async () => {
