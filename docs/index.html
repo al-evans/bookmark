@@ -27,7 +27,7 @@
     <meta name="twitter:image:alt" content="The Bookmark wordmark and the headline Track your reading, beside a phone running the app, showing Project Hail Mary at 74 percent with a Log button." />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
-    <link rel="preload" as="image" href="bookmark-demo-poster.jpg" />
+    <link rel="preload" as="image" href="demo/scene-1.webp" fetchpriority="high" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%23eff6ff'/%3E%3Cpath d='M60 36a8 8 0 0 1 8-8h56a8 8 0 0 1 8 8v124L96 136l-36 24V36z' fill='%230f172a'/%3E%3Cpolygon points='96,68 102.7,82 118,84 107,94.5 109.7,109.7 96,102.5 82.3,109.7 85,94.5 74,84 89.3,82' fill='%23eff6ff'/%3E%3C/svg%3E"
@@ -56,6 +56,9 @@
         /* Opaque so the ring keeps 3:1 contrast against the surface.
            It reads var(--blue), so dark mode needs no second value. */
         --focus: 0 0 0 3px var(--blue);
+        /* --line is a divider, too faint to be a control edge. This value
+           clears 3:1 on both surfaces, so one value covers both modes. */
+        --button-line: #64748b;
       }
 
       @media (prefers-color-scheme: dark) {
@@ -190,23 +193,159 @@
         position: relative;
       }
 
-      /* Reserve the exact box before load so nothing shifts. */
-      .hero-video {
-        aspect-ratio: 16 / 9;
-        background: var(--surface-2);
-        display: block;
-        height: auto;
+      /* ---------- Hero demo ----------
+         The same seven scenes the video showed, but built from HTML: real
+         screenshots in a CSS phone, with the captions as selectable text. */
+      .hero-demo {
+        align-items: center;
+        display: grid;
+        gap: calc(var(--space) * 2);
+        grid-template-areas:
+          "copy"
+          "phone"
+          "controls";
+        justify-items: center;
+        padding: clamp(22px, 4.5vw, 44px);
+        text-align: center;
+      }
+
+      @media (min-width: 780px) {
+        .hero-demo {
+          grid-template-areas:
+            "copy     phone"
+            "controls phone";
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: calc(var(--space) * 2) calc(var(--space) * 4);
+          justify-items: start;
+          text-align: left;
+        }
+
+        /* The phone spans both rows, so pull the caption and the controls
+           together at the row boundary instead of to the outer edges. */
+        .demo-copy {
+          align-self: end;
+        }
+
+        .demo-controls {
+          align-self: start;
+        }
+      }
+
+      .demo-copy {
+        grid-area: copy;
+      }
+
+      /* A caption, not a section heading, so it cannot sit above the h1. */
+      .demo-title {
+        font-size: clamp(1.45rem, 1.15rem + 1.5vw, 2.4rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.08;
+        margin: 0 0 8px;
+        text-wrap: balance;
+      }
+
+      .demo-sub {
+        color: var(--muted);
+        font-size: clamp(0.98rem, 0.94rem + 0.3vw, 1.15rem);
+        margin: 0;
+        max-width: 32ch;
+        text-wrap: pretty;
+      }
+
+      /* The bezel is chrome, so CSS may draw it. The screen never is. */
+      .demo-phone {
+        background: #0f172a;
+        border-radius: clamp(30px, 6vw, 42px);
+        box-shadow: 0 18px 44px rgba(15, 23, 42, 0.3);
+        grid-area: phone;
+        padding: clamp(7px, 1.6vw, 11px);
+        width: min(268px, 62vw);
+      }
+
+      .demo-screen {
+        aspect-ratio: 390 / 833;
+        border-radius: clamp(24px, 5vw, 33px);
+        display: grid;
+        overflow: hidden;
+      }
+
+      .demo-shot {
+        grid-area: 1 / 1;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.55s ease;
         width: 100%;
       }
 
-      /* The media box hides overflow, so the video's own ring would be
-         clipped. Draw the ring on the container instead. */
-      .hero-media:has(.hero-video:focus-visible) {
-        box-shadow: var(--focus), var(--shadow);
+      .demo-shot[data-active="true"] {
+        opacity: 1;
       }
 
-      .hero-video:focus-visible {
-        box-shadow: none;
+      .demo-controls {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 10px;
+        grid-area: controls;
+        justify-content: center;
+      }
+
+      .demo-dots {
+        display: flex;
+      }
+
+      /* A 48px target wrapped around an 8px bar. */
+      .demo-dot {
+        background: none;
+        border: 0;
+        border-radius: 12px;
+        cursor: pointer;
+        display: grid;
+        height: 48px;
+        padding: 0;
+        place-items: center;
+        width: 48px;
+      }
+
+      .demo-dot::before {
+        background: var(--button-line);
+        border-radius: 4px;
+        content: "";
+        display: block;
+        height: 8px;
+        transition: background-color 0.2s ease, width 0.2s ease;
+        width: 20px;
+      }
+
+      .demo-dot[aria-current="true"]::before {
+        background: var(--blue);
+        width: 30px;
+      }
+
+      .demo-toggle {
+        background: none;
+        border: 1px solid var(--button-line);
+        border-radius: 999px;
+        color: var(--ink);
+        cursor: pointer;
+        font: inherit;
+        font-size: clamp(0.82rem, 0.8rem + 0.1vw, 0.9rem);
+        font-weight: 700;
+        min-height: 48px;
+        min-width: 48px;
+        padding: 0 18px;
+      }
+
+      .demo-toggle:hover {
+        background: var(--blue-soft);
+      }
+
+      /* Seven 48px targets no longer fit, so shrink the idle width only. */
+      @media (max-width: 379px) {
+        .demo-dot {
+          width: 40px;
+        }
       }
 
       .hero-media[data-loading="true"]::after {
@@ -293,13 +432,13 @@
 
       .button--secondary {
         background: transparent;
-        border-color: var(--line);
+        border-color: var(--button-line);
         color: var(--ink);
       }
 
       .button--secondary:hover {
         background: var(--blue-soft);
-        border-color: var(--blue-line);
+        border-color: var(--button-line);
       }
 
       /* ---------- Footer ---------- */
@@ -372,27 +511,37 @@
         max-width: 56ch;
       }
 
+      /* Phones get the field on its own row and two equal buttons under it.
+         The old flex row wrapped Copy onto a second line at its own width. */
       .pw-row {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
         gap: 10px;
+        grid-template-columns: 1fr 1fr;
       }
 
       .pw-output {
         background: var(--blue-soft);
         border: 1px solid var(--blue-line);
-        border-radius: 10px;
+        border-radius: 12px;
         color: var(--ink);
-        flex: 1 1 260px;
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         font-size: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
+        grid-column: 1 / -1;
         min-height: 48px;
+        min-width: 0;
         padding: 12px 14px;
         width: 100%;
       }
 
-      .pw-row .button {
-        flex: 0 0 auto;
+      /* Once the field can hold 24 characters, put all three on one row. */
+      @media (min-width: 620px) {
+        .pw-row {
+          grid-template-columns: minmax(0, 1fr) auto auto;
+        }
+
+        .pw-output {
+          grid-column: auto;
+        }
       }
 
       .pw-note {
@@ -414,6 +563,18 @@
           border-inline: 0;
           border-radius: 0;
           margin-inline: calc(50% - 50vw);
+        }
+      }
+
+      /* A full phone is tall, so on a narrow screen the headline and the
+         Deploy button come first and the demo follows. */
+      @media (max-width: 779px) {
+        .hero-copy {
+          order: 1;
+        }
+
+        .hero-media {
+          order: 2;
         }
       }
 
@@ -447,22 +608,151 @@
 
         <main class="hero" id="main-content">
           <div class="hero-media" data-loading="true">
-            <video
-              class="hero-video"
-              autoplay
-              controls
-              loop
-              muted
-              playsinline
-              preload="metadata"
-              width="1920"
-              height="1080"
-              poster="bookmark-demo-poster.jpg"
-              aria-label="Demo of the Bookmark app: logging reading progress by percent or page number, saving a book to read next, and reviewing finished books"
+            <div
+              class="hero-demo"
+              id="hero-demo"
+              role="group"
+              aria-roledescription="carousel"
+              aria-label="Bookmark demo, seven screens of the running app"
             >
-              <source src="bookmark-demo.mp4" type="video/mp4" />
-              Your browser does not support embedded video.
-            </video>
+              <div class="demo-copy">
+                <p class="demo-title" id="demo-title">Track what you read</p>
+                <p class="demo-sub" id="demo-sub">Your current book, cover, and daily pace.</p>
+              </div>
+
+              <div class="demo-phone">
+                <div class="demo-screen">
+                  <img
+                    class="demo-shot"
+                    data-active="true"
+                    src="demo/scene-1.webp"
+                    width="780"
+                    height="1666"
+                    fetchpriority="high"
+                    decoding="async"
+                    alt="Currently Reading, showing the book cover, a progress bar at 68 percent, and the pace needed each day."
+                  />
+                  <img
+                    class="demo-shot"
+                    data-src="demo/scene-2.webp"
+                    width="780"
+                    height="1666"
+                    decoding="async"
+                    aria-hidden="true"
+                    alt="The log form open, offering Percent or Pages, with page 367 of 496 entered."
+                  />
+                  <img
+                    class="demo-shot"
+                    data-src="demo/scene-3.webp"
+                    width="780"
+                    height="1666"
+                    decoding="async"
+                    aria-hidden="true"
+                    alt="The same book at 74 percent, with the progress history listing the new entry."
+                  />
+                  <img
+                    class="demo-shot"
+                    data-src="demo/scene-4.webp"
+                    width="780"
+                    height="1666"
+                    decoding="async"
+                    aria-hidden="true"
+                    alt="The Want to Read list, with a short AI summary under a saved book."
+                  />
+                  <img
+                    class="demo-shot"
+                    data-src="demo/scene-5.webp"
+                    width="780"
+                    height="1666"
+                    decoding="async"
+                    aria-hidden="true"
+                    alt="Reading stats on the Finished tab: 29.5 days a book, plus the longest and shortest books."
+                  />
+                  <img
+                    class="demo-shot"
+                    data-src="demo/scene-6.webp"
+                    width="780"
+                    height="1666"
+                    decoding="async"
+                    aria-hidden="true"
+                    alt="The Finished tab, with every finished book grouped by month."
+                  />
+                  <img
+                    class="demo-shot"
+                    data-src="demo/scene-7.webp"
+                    width="780"
+                    height="1666"
+                    decoding="async"
+                    aria-hidden="true"
+                    alt="Settings, offering progress style, a light or dark theme, and the app icon."
+                  />
+                </div>
+              </div>
+
+              <div class="demo-controls">
+                <div class="demo-dots" id="demo-dots">
+                  <button
+                    class="demo-dot"
+                    type="button"
+                    aria-current="true"
+                    aria-label="Show Track what you read"
+                    data-title="Track what you read"
+                    data-sub="Your current book, cover, and daily pace."
+                  ></button>
+                  <button
+                    class="demo-dot"
+                    type="button"
+                    aria-current="false"
+                    aria-label="Show Log progress fast"
+                    data-title="Log progress fast"
+                    data-sub="Enter a percent or a page number."
+                  ></button>
+                  <button
+                    class="demo-dot"
+                    type="button"
+                    aria-current="false"
+                    aria-label="Show See it update instantly"
+                    data-title="See it update instantly"
+                    data-sub="The bar moves and history records it."
+                  ></button>
+                  <button
+                    class="demo-dot"
+                    type="button"
+                    aria-current="false"
+                    aria-label="Show Keep a want-to-read list"
+                    data-title="Keep a want-to-read list"
+                    data-sub="Optional AI adds a short book summary."
+                  ></button>
+                  <button
+                    class="demo-dot"
+                    type="button"
+                    aria-current="false"
+                    aria-label="Show See your reading stats"
+                    data-title="See your reading stats"
+                    data-sub="Your pace, plus longest and shortest books."
+                  ></button>
+                  <button
+                    class="demo-dot"
+                    type="button"
+                    aria-current="false"
+                    aria-label="Show Review what you finished"
+                    data-title="Review what you finished"
+                    data-sub="Every finished book, grouped by month."
+                  ></button>
+                  <button
+                    class="demo-dot"
+                    type="button"
+                    aria-current="false"
+                    aria-label="Show Make the app yours"
+                    data-title="Make the app yours"
+                    data-sub="Progress style, light or dark, and app icon."
+                  ></button>
+                </div>
+                <button class="demo-toggle" id="demo-toggle" type="button" aria-label="Pause the demo">
+                  Pause
+                </button>
+              </div>
+            </div>
           </div>
 
           <div class="hero-copy">
@@ -585,43 +875,100 @@
         });
       });
 
-      const media = document.querySelector(".hero-media");
-      const video = document.querySelector(".hero-video");
-      const clearSkeleton = () => media.setAttribute("data-loading", "false");
+      // Hero demo. The seven scenes the video showed, cycled in HTML.
+      (() => {
+        const demo = document.getElementById("hero-demo");
+        const media = document.querySelector(".hero-media");
+        const shots = [...demo.querySelectorAll(".demo-shot")];
+        const dots = [...demo.querySelectorAll(".demo-dot")];
+        const title = document.getElementById("demo-title");
+        const sub = document.getElementById("demo-sub");
+        const toggle = document.getElementById("demo-toggle");
+        // The same beat as the video: each scene holds for 3.4 s.
+        const HOLD = 3400;
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-      if (video.readyState >= 2) clearSkeleton();
-      video.addEventListener("loadeddata", clearSkeleton, { once: true });
-      video.addEventListener("error", clearSkeleton, { once: true });
+        let index = 0;
+        let timer = null;
+        let playing = false;
 
-      // Respect a reduced-motion preference instead of autoplaying.
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-      const respectMotionPreference = () => {
-        if (reducedMotion.matches) video.pause();
-      };
-      reducedMotion.addEventListener("change", respectMotionPreference);
-      respectMotionPreference();
+        function loadShot(i) {
+          const shot = shots[i];
+          if (!shot.dataset.src) return;
+          shot.src = shot.dataset.src;
+          delete shot.dataset.src;
+        }
 
-      // Pause off-screen playback to save battery and data.
-      if ("IntersectionObserver" in window) {
-        // Only resume what the observer paused, so an explicit pause sticks.
-        let pausedByObserver = false;
-        new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (reducedMotion.matches) return;
-              if (entry.isIntersecting) {
-                if (!pausedByObserver) return;
-                pausedByObserver = false;
-                video.play().catch(() => {});
-              } else if (!video.paused) {
-                pausedByObserver = true;
-                video.pause();
-              }
-            });
-          },
-          { threshold: 0.25 },
-        ).observe(video);
-      }
+        function show(next) {
+          index = (next + shots.length) % shots.length;
+          loadShot(index);
+          shots.forEach((shot, i) => {
+            const active = i === index;
+            shot.dataset.active = String(active);
+            // Only the visible screen should reach a screen reader.
+            shot.setAttribute("aria-hidden", String(!active));
+          });
+          dots.forEach((dot, i) => dot.setAttribute("aria-current", String(i === index)));
+          title.textContent = dots[index].dataset.title;
+          sub.textContent = dots[index].dataset.sub;
+        }
+
+        function setPlaying(next) {
+          playing = next;
+          clearInterval(timer);
+          timer = playing ? setInterval(() => show(index + 1), HOLD) : null;
+          toggle.textContent = playing ? "Pause" : "Play";
+          toggle.setAttribute("aria-label", playing ? "Pause the demo" : "Play the demo");
+        }
+
+        dots.forEach((dot, i) =>
+          dot.addEventListener("click", () => {
+            show(i);
+            // Picking a scene means the visitor is driving, so stop advancing.
+            setPlaying(false);
+          }),
+        );
+
+        toggle.addEventListener("click", () => setPlaying(!playing));
+
+        // Clear the skeleton as soon as the first screen can be seen.
+        const clearSkeleton = () => media.setAttribute("data-loading", "false");
+        if (shots[0].complete) {
+          clearSkeleton();
+        } else {
+          shots[0].addEventListener("load", clearSkeleton, { once: true });
+          shots[0].addEventListener("error", clearSkeleton, { once: true });
+        }
+
+        show(0);
+
+        // Respect a reduced-motion preference instead of autoplaying.
+        const applyMotionPreference = () => setPlaying(!reducedMotion.matches);
+        reducedMotion.addEventListener("change", applyMotionPreference);
+        applyMotionPreference();
+
+        // Stop off-screen so a scrolled-past demo does no work.
+        if ("IntersectionObserver" in window) {
+          // Only resume what the observer paused, so an explicit pause sticks.
+          let pausedByObserver = false;
+          new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (reducedMotion.matches) return;
+                if (entry.isIntersecting) {
+                  if (!pausedByObserver) return;
+                  pausedByObserver = false;
+                  setPlaying(true);
+                } else if (playing) {
+                  pausedByObserver = true;
+                  setPlaying(false);
+                }
+              });
+            },
+            { threshold: 0.25 },
+          ).observe(demo);
+        }
+      })();
     </script>
   </body>
 </html>
