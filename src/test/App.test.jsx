@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import App from '../App';
+import { migrateRenamedStorageKeys } from '../utils/storageKeys';
 import { getTodayPtDateKey } from '../utils/timezone';
 
 // Mock localStorage
@@ -179,7 +180,7 @@ beforeEach(() => {
 describe('App', () => {
   it('renders the app header', async () => {
     await renderApp();
-    expect(screen.getByRole('heading', { name: /My Reading Goals/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Bookmark/i })).toBeInTheDocument();
   });
 
   it('sends the stored app password when loading shared books', async () => {
@@ -298,7 +299,7 @@ describe('App', () => {
   });
 
   it('shows reading stats and can collapse a finished month section', async () => {
-    localStorageMock.setItem('reading-app-books', JSON.stringify([
+    localStorageMock.setItem('bookmark-books', JSON.stringify([
       {
         id: 'finished-1',
         title: 'Project Hail Mary',
@@ -364,7 +365,7 @@ describe('App', () => {
   });
 
   it('calculates average days when finished books are missing dateStarted', async () => {
-    localStorageMock.setItem('reading-app-books', JSON.stringify([
+    localStorageMock.setItem('bookmark-books', JSON.stringify([
       {
         id: 'finished-no-start-1',
         title: 'Book Without Start Date',
@@ -402,7 +403,7 @@ describe('App', () => {
   });
 
   it('edits finished book dates and re-groups by end date month', async () => {
-    localStorageMock.setItem('reading-app-books', JSON.stringify([
+    localStorageMock.setItem('bookmark-books', JSON.stringify([
       {
         id: 'finished-edit-1',
         title: 'The Dispossessed',
@@ -638,5 +639,77 @@ describe('App', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /Enable reading reminders/i })).toHaveTextContent('Reminders Enabled');
     });
+  });
+});
+
+describe('storage keys renamed from Reading Goals to Bookmark', () => {
+  beforeEach(() => {
+    localStorageMock.clear();
+  });
+
+  it('moves each saved value to the new key and removes the old one', () => {
+    localStorageMock.setItem('reading-app-books', '[{"id":"a"}]');
+    localStorageMock.setItem('reading-app-theme', 'dark');
+    localStorageMock.setItem('reading-app-icon-scheme', 'dark');
+    localStorageMock.setItem('reading-app-progress-bar-style', 'glow');
+
+    migrateRenamedStorageKeys();
+
+    expect(localStorageMock.getItem('bookmark-books')).toBe('[{"id":"a"}]');
+    expect(localStorageMock.getItem('bookmark-theme')).toBe('dark');
+    expect(localStorageMock.getItem('bookmark-icon-scheme')).toBe('dark');
+    expect(localStorageMock.getItem('bookmark-progress-bar-style')).toBe('glow');
+
+    expect(localStorageMock.getItem('reading-app-books')).toBeNull();
+    expect(localStorageMock.getItem('reading-app-theme')).toBeNull();
+  });
+
+  it('keeps real data already held under the new key and backs up conflicting old data', () => {
+    localStorageMock.setItem('reading-app-theme', 'dark');
+    localStorageMock.setItem('bookmark-theme', 'light');
+
+    migrateRenamedStorageKeys();
+
+    expect(localStorageMock.getItem('bookmark-theme')).toBe('light');
+    expect(localStorageMock.getItem('bookmark-theme:reading-app-backup')).toBe('dark');
+    expect(localStorageMock.getItem('reading-app-theme')).toBeNull();
+  });
+
+  it('does not replay the old books after the new library is emptied', () => {
+    localStorageMock.setItem('reading-app-books', '[{"id":"old"}]');
+    localStorageMock.setItem('bookmark-books', '[{"id":"new"}]');
+
+    migrateRenamedStorageKeys();
+
+    expect(localStorageMock.getItem('bookmark-books')).toBe('[{"id":"new"}]');
+    expect(localStorageMock.getItem('bookmark-books:reading-app-backup')).toBe('[{"id":"old"}]');
+    expect(localStorageMock.getItem('reading-app-books')).toBeNull();
+
+    localStorageMock.setItem('bookmark-books', '[]');
+    migrateRenamedStorageKeys();
+
+    expect(localStorageMock.getItem('bookmark-books')).toBe('[]');
+    expect(localStorageMock.getItem('bookmark-books:reading-app-backup')).toBe('[{"id":"old"}]');
+    expect(localStorageMock.getItem('reading-app-books')).toBeNull();
+  });
+
+  it('migrates past an empty list written by an earlier load', () => {
+    // A first load of the renamed app saves an empty list before it reads any
+    // old data. That empty value must not block the migration, or the books
+    // are stranded under the old name.
+    localStorageMock.setItem('reading-app-books', '[{"id":"a"}]');
+    localStorageMock.setItem('bookmark-books', '[]');
+
+    migrateRenamedStorageKeys();
+
+    expect(localStorageMock.getItem('bookmark-books')).toBe('[{"id":"a"}]');
+    expect(localStorageMock.getItem('reading-app-books')).toBeNull();
+  });
+
+  it('leaves a fresh install untouched', () => {
+    migrateRenamedStorageKeys();
+
+    expect(localStorageMock.getItem('bookmark-books')).toBeNull();
+    expect(localStorageMock.getItem('bookmark-theme')).toBeNull();
   });
 });
