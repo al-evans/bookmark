@@ -680,6 +680,11 @@ describe('storage keys renamed from Reading Goals to Bookmark', () => {
     localStorageMock.setItem('bookmark-books', '[{"id":"new"}]');
 
     migrateRenamedStorageKeys();
+
+    expect(localStorageMock.getItem('bookmark-books')).toBe('[{"id":"new"}]');
+    expect(localStorageMock.getItem('bookmark-books:reading-app-backup')).toBe('[{"id":"old"}]');
+    expect(localStorageMock.getItem('reading-app-books')).toBeNull();
+
     localStorageMock.setItem('bookmark-books', '[]');
     migrateRenamedStorageKeys();
 
