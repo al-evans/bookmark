@@ -164,7 +164,8 @@ Two settings decide whether the capture is usable:
   uses `max(env(safe-area-inset-bottom, 0), 0.25rem)`, and headless Chrome
   reports that inset as 0, so the nav lands 4px from the screen edge instead
   of 34px. The phone frame on the landing page has a 33px corner radius and
-  `overflow: hidden`, so at 4px the corner cuts the first tab label in half.
+  `overflow: hidden`, so at 4px the first tab label appears shaved because the
+  two antialiased edges overlap, although it clears the arc.
 - Wait for the covers properly. The list renders only after the API responds,
   so at `domcontentloaded` `document.images` is still empty, and `[].every()`
   is `true`. A wait built only on that check returns at once and screenshots a
