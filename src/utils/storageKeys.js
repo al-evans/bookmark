@@ -46,8 +46,8 @@ export function migrateRenamedStorageKeys() {
         if (oldValue !== newValue) {
           localStorage.setItem(`${newKey}${CONFLICT_BACKUP_SUFFIX}`, oldValue);
         }
-        // Real data is already saved under the new name, so it wins. Preserve
-        // any conflicting old copy under a backup key before retiring the source.
+        // Real data is already saved under the new name, so it wins. Matching
+        // old data is already preserved there; conflicting old data was backed up.
         localStorage.removeItem(oldKey);
         continue;
       }
