@@ -292,16 +292,20 @@
         display: flex;
       }
 
-      /* A 48px target wrapped around an 8px bar. */
+      /* A 48px target wrapped around an 8px bar. The bar is pinned to a fixed
+         left inset instead of centred, so the idle and active widths both grow
+         rightward from the same x-coordinate. */
       .demo-dot {
+        --dot-inset: 14px;
+        align-items: center;
         background: none;
         border: 0;
         border-radius: 12px;
         cursor: pointer;
         display: grid;
         height: 48px;
+        justify-items: start;
         padding: 0;
-        place-items: center;
         width: 48px;
       }
 
@@ -311,6 +315,7 @@
         content: "";
         display: block;
         height: 8px;
+        margin-inline-start: var(--dot-inset);
         transition: background-color 0.2s ease, width 0.2s ease;
         width: 20px;
       }
@@ -341,6 +346,8 @@
       /* Seven 48px targets no longer fit, so shrink the idle width only. */
       @media (max-width: 379px) {
         .demo-dot {
+          /* Keeps the widest (30px) bar inside the narrower target. */
+          --dot-inset: 5px;
           width: 40px;
         }
       }
