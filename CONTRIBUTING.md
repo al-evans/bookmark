@@ -123,7 +123,7 @@ Image.open("s1.png").convert("RGB").resize((780, 1666), Image.LANCZOS) \
 ```
 
 780x1666 is twice the 390x833 capture viewport, so the screen stays sharp on
-a 2x display. All seven come to about 317 KB, and only the first one loads
+a 2x display. All seven come to about 308 KB, and only the first one loads
 before the visitor scrolls.
 
 The captions live in `docs/index.html` on each dot button, as `data-title`
@@ -150,6 +150,27 @@ dots, and one phone screenshot.
 Slides 1 and 2 show the book before you log progress. Slides 3 to 7 show it
 after. Change `server/data/books.json` to stage each state, and keep a backup.
 That file is in `.gitignore`. Make sure it stays untracked.
+
+Re-seed that file immediately before **every** capture run, not once at the
+start. Scene 2 clicks the Pages unit toggle, and the app saves that choice to
+the book at once. Re-running the first scenario without re-seeding therefore
+captures scene 1 in pages mode, which disagrees with the percent history in
+scene 3.
+
+Two settings decide whether the capture is usable:
+
+- Emulate the phone safe area. Send `Emulation.setSafeAreaInsetsOverride` with
+  `{ insets: { bottom: 34 } }` over CDP before you navigate. The bottom nav
+  uses `max(env(safe-area-inset-bottom, 0), 0.25rem)`, and headless Chrome
+  reports that inset as 0, so the nav lands 4px from the screen edge instead
+  of 34px. The phone frame on the landing page has a 33px corner radius and
+  `overflow: hidden`, so at 4px the first tab label appears shaved because the
+  two antialiased edges overlap, although it clears the arc.
+- Wait for the covers properly. The list renders only after the API responds,
+  so at `domcontentloaded` `document.images` is still empty, and `[].every()`
+  is `true`. A wait built only on that check returns at once and screenshots a
+  blank cover. Wait for `.bottom-nav`, then `networkidle`, and only then check
+  that every image is complete. Print the loaded count with each shot.
 
 Capture the screens at a 390x833 viewport with `deviceScaleFactor: 3`. Each
 slide is 1920x1080 on `#F8FAFC`:
