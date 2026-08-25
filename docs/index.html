@@ -438,7 +438,7 @@
 
       .button--secondary:hover {
         background: var(--blue-soft);
-        border-color: var(--blue-line);
+        border-color: var(--button-line);
       }
 
       /* ---------- Footer ---------- */
@@ -634,60 +634,54 @@
                   />
                   <img
                     class="demo-shot"
-                    src="demo/scene-2.webp"
+                    data-src="demo/scene-2.webp"
                     width="780"
                     height="1666"
-                    loading="lazy"
                     decoding="async"
                     aria-hidden="true"
                     alt="The log form open, offering Percent or Pages, with page 367 of 496 entered."
                   />
                   <img
                     class="demo-shot"
-                    src="demo/scene-3.webp"
+                    data-src="demo/scene-3.webp"
                     width="780"
                     height="1666"
-                    loading="lazy"
                     decoding="async"
                     aria-hidden="true"
                     alt="The same book at 74 percent, with the progress history listing the new entry."
                   />
                   <img
                     class="demo-shot"
-                    src="demo/scene-4.webp"
+                    data-src="demo/scene-4.webp"
                     width="780"
                     height="1666"
-                    loading="lazy"
                     decoding="async"
                     aria-hidden="true"
                     alt="The Want to Read list, with a short AI summary under a saved book."
                   />
                   <img
                     class="demo-shot"
-                    src="demo/scene-5.webp"
+                    data-src="demo/scene-5.webp"
                     width="780"
                     height="1666"
-                    loading="lazy"
                     decoding="async"
                     aria-hidden="true"
                     alt="Reading stats on the Finished tab: 29.5 days a book, plus the longest and shortest books."
                   />
                   <img
                     class="demo-shot"
-                    src="demo/scene-6.webp"
+                    data-src="demo/scene-6.webp"
                     width="780"
                     height="1666"
-                    loading="lazy"
                     decoding="async"
                     aria-hidden="true"
                     alt="The Finished tab, with every finished book grouped by month."
                   />
                   <img
                     class="demo-shot"
-                    src="demo/scene-7.webp"
+                    data-src="demo/scene-7.webp"
                     width="780"
                     height="1666"
-                    loading="lazy"
                     decoding="async"
                     aria-hidden="true"
                     alt="Settings, offering progress style, a light or dark theme, and the app icon."
@@ -898,8 +892,16 @@
         let timer = null;
         let playing = false;
 
+        function loadShot(i) {
+          const shot = shots[i];
+          if (!shot.dataset.src) return;
+          shot.src = shot.dataset.src;
+          delete shot.dataset.src;
+        }
+
         function show(next) {
           index = (next + shots.length) % shots.length;
+          loadShot(index);
           shots.forEach((shot, i) => {
             const active = i === index;
             shot.dataset.active = String(active);
