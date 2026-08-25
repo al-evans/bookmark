@@ -70,7 +70,7 @@ export function getAiTimeoutMs() {
 
 export function missingAiKeyMessage() {
   const { keyEnvVars, label } = getProviderConfig();
-  return `${label} key missing. Set ${keyEnvVars[0]} (or ${keyEnvVars.at(-1)}) in your environment.`;
+  return `${label} key missing. Set one of ${keyEnvVars.join(', ')} in your environment.`;
 }
 
 export function aiRequestFailedMessage() {

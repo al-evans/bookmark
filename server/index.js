@@ -10,7 +10,6 @@ import {
   aiRequestFailedMessage,
   aiTimeoutMessage,
   getAiModelId,
-  getAiProviderLabel,
   getAiTimeoutMs,
   getLanguageModel,
   isAiConfigured,
@@ -430,8 +429,8 @@ app.post('/api/ai-estimate', async (req, res) => {
     });
   } catch {
     clearTimeout(timeout);
-    return res.status(500).json({
-      error: `Could not reach the ${getAiProviderLabel()} service.`,
+    return res.status(502).json({
+      error: aiRequestFailedMessage(),
       modelUsed,
     });
   }
