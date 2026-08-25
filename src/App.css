@@ -2296,8 +2296,11 @@ form select:focus {
   color: #94a3b8;
 }
 
+/* The label sits on the blue pill, so blue-on-blue made the active tab read
+   as the weakest item. Near-white matches the light theme and every other
+   selected control in dark mode. */
 [data-theme="dark"] .bottom-nav__item--active {
-  color: #60a5fa;
+  color: #f8fafc;
 }
 
 [data-theme="dark"] .btn-secondary {
