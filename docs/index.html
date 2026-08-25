@@ -214,20 +214,13 @@
           grid-template-areas:
             "copy     phone"
             "controls phone";
-          grid-template-columns: minmax(0, 1fr) auto;
-          gap: calc(var(--space) * 2) calc(var(--space) * 4);
+          grid-template-columns: minmax(0, 34ch) auto;
+          gap: calc(var(--space) * 2) calc(var(--space) * 3);
+          /* Size both tracks to their content and centre the pair, so the
+             copy column cannot stretch and strand the phone at the edge. */
+          justify-content: center;
           justify-items: start;
           text-align: left;
-        }
-
-        /* The phone spans both rows, so pull the caption and the controls
-           together at the row boundary instead of to the outer edges. */
-        .demo-copy {
-          align-self: end;
-        }
-
-        .demo-controls {
-          align-self: start;
         }
       }
 
@@ -253,11 +246,15 @@
         text-wrap: pretty;
       }
 
-      /* The bezel is chrome, so CSS may draw it. The screen never is. */
+      /* The bezel is chrome, so CSS may draw it. The screen never is.
+         The hairline ring keeps the bezel readable in dark mode, where
+         --surface-2 (#131f37) sits very close to the bezel colour. */
       .demo-phone {
         background: #0f172a;
         border-radius: clamp(30px, 6vw, 42px);
-        box-shadow: 0 18px 44px rgba(15, 23, 42, 0.3);
+        box-shadow:
+          0 0 0 1px rgba(148, 163, 184, 0.6),
+          0 18px 44px rgba(15, 23, 42, 0.3);
         grid-area: phone;
         padding: clamp(7px, 1.6vw, 11px);
         width: min(268px, 62vw);
@@ -345,6 +342,26 @@
       @media (max-width: 379px) {
         .demo-dot {
           width: 40px;
+        }
+      }
+
+      /* Kept after the base rules so these overrides win on equal specificity. */
+      @media (min-width: 780px) {
+        /* The phone spans both rows, so pull the caption and the controls
+           together at the row boundary instead of to the outer edges. */
+        .demo-copy {
+          align-self: end;
+        }
+
+        .demo-controls {
+          align-self: start;
+          justify-content: flex-start;
+        }
+
+        /* Each dot is a 48px target around a 20px bar, so pull the row back
+           by the 14px inset to line the first bar up with the text. */
+        .demo-dots {
+          margin-left: -14px;
         }
       }
 

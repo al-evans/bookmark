@@ -410,6 +410,8 @@ body {
 }
 
 .bottom-nav__item {
+  position: relative;
+  isolation: isolate;
   min-height: 54px;
   border: none;
   background: transparent;
@@ -420,9 +422,20 @@ body {
   justify-content: center;
   gap: 0.12rem;
   cursor: pointer;
-  border-radius: 8px;
-  transition: color 0.15s, background-color 0.15s;
+  transition: color 0.15s;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* The button stays full-bleed so the touch target keeps its full width,
+   while the pill that shows state is inset and fully rounded. */
+.bottom-nav__item::before {
+  content: "";
+  position: absolute;
+  inset: 3px 6px;
+  z-index: -1;
+  border-radius: 14px;
+  background: transparent;
+  transition: background-color 0.15s;
 }
 
 .bottom-nav__item span {
@@ -435,18 +448,28 @@ body {
 @media (hover: hover) and (pointer: fine) {
   .bottom-nav__item:hover {
     color: var(--white);
+  }
+
+  .bottom-nav__item:hover::before {
     background: rgba(59, 130, 246, 0.14);
   }
 }
 
 .bottom-nav__item--active {
   color: var(--white);
+}
+
+.bottom-nav__item--active::before {
   background: rgba(29, 78, 216, 0.38);
 }
 
 .bottom-nav__item:focus-visible {
+  outline: none;
+}
+
+.bottom-nav__item:focus-visible::before {
   outline: 2px solid #93c5fd;
-  outline-offset: -2px;
+  outline-offset: 0;
 }
 
 /* ===== Book Section ===== */
