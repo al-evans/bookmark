@@ -75,9 +75,9 @@ drawing goes stale, and the last hand-drawn preview was wrong in six ways.
 
 | File | Source | Purpose |
 |---|---|---|
-| `docs/social-preview.png` | `docs/social-preview.svg` | 1200x630, for `og:image` |
+| `docs/social-preview.png` | `docs/social-preview.svg` | 2400x1260, for `og:image` |
 | `docs/social-preview-github.png` | `docs/social-preview-github.svg` | 1280x640, for Settings > Social preview |
-| `docs/readme-banner.png` | `docs/readme-banner.svg` | 1200x360, for `README.md` |
+| `docs/readme-banner.png` | `docs/readme-banner.svg` | 2400x720, for `README.md` |
 | `docs/bookmark-demo.mp4` | see below | 1920x1080, 25 fps, 21.6 s |
 | `docs/bookmark-demo-poster.jpg` | frame 0 of the video | 1920x1080 |
 
@@ -90,7 +90,12 @@ external files from an SVG, so a relative link shows a broken image.
 2. Capture with Playwright at `deviceScaleFactor: 3`. Crop from the top with
    `screenshot({ clip: { x: 0, y: 0, ... } })`. A centred crop cuts the header off.
 3. Put the new base64 data into the `.svg`.
-4. Render the `.svg` to PNG at `deviceScaleFactor: 2`.
+4. Render the `.svg` to PNG at `deviceScaleFactor: 2`, then downscale with
+   LANCZOS if the file needs an exact size.
+   `docs/social-preview-github.png` must be exactly 1280x640. That is the size
+   GitHub documents for Settings > Social preview, and a 2x file was rejected
+   there: GitHub kept the reference but never stored the image, so the card
+   came back blank and the stored URL returned 404.
 5. Measure `getBoundingClientRect()` on each `<text>` node. Overlapping text is
    easy to miss by eye.
 
@@ -124,6 +129,21 @@ slide is 1920x1080 on `#F8FAFC`:
 
 Join the slides with ffmpeg. Each slide shows for 3.428571 s and each
 crossfade takes 0.4 s. This gives 21.6 s in total.
+
+Two encoder settings are necessary. Without them the book cover looks soft
+for about half a second after each crossfade, because x264 predicts those
+frames from the blurred dissolve and gives the detail too few bits.
+
+- `-force_key_frames` at the end of every crossfade, that is at
+  `0,3.4286,6.4571,9.4857,12.5143,15.5429,18.5714`. A dissolve is gradual,
+  so scene-cut detection does not fire on it. Force the keyframes instead.
+- `-tune stillimage -crf 29`. The slides are static, so this tune holds
+  detail far better at the same size.
+
+To check the result, take the exact frames after a crossfade with
+`-vf "select='between(n,A,B)'" -vsync 0 -frame_pts 1` and compare the
+variance of the Laplacian. Do not seek with `-ss` before `-i`: that snaps
+to the nearest keyframe and returns the same frame every time.
 
 ## Commit and PR style
 
