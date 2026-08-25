@@ -10,13 +10,18 @@ import { enrichBook } from './services/ai';
 import { buildAuthHeaders, getStoredAppPassword, readApiError, saveStoredAppPassword } from './services/appAuth';
 import { hasReadingReminderSubscription, subscribeToReadingReminders } from './services/pushNotifications';
 import { PT_TIME_ZONE_VERSION, getPtDateKey, getTodayPtDateKey, migrateBooksToPtIfNeeded } from './utils/timezone';
+import {
+  ADMIN_TEST_TOKEN_KEY,
+  ICON_SCHEME_KEY,
+  PROGRESS_BAR_STYLE_KEY,
+  STORAGE_KEY,
+  THEME_KEY,
+  migrateRenamedStorageKeys,
+} from './utils/storageKeys';
 import './App.css';
 
-const STORAGE_KEY = 'reading-app-books';
-const ADMIN_TEST_TOKEN_KEY = 'reading-app-admin-test-token';
-const PROGRESS_BAR_STYLE_KEY = 'reading-app-progress-bar-style';
-const THEME_KEY = 'reading-app-theme';
-const ICON_SCHEME_KEY = 'reading-app-icon-scheme';
+migrateRenamedStorageKeys();
+
 const PROGRESS_BAR_STYLES = [
   { key: 'classic', label: 'Classic rail', description: 'A crisp, familiar progress strip.' },
   { key: 'glow', label: 'Glow sweep', description: 'A vivid gradient with a softer finish.' },
@@ -28,7 +33,7 @@ const APPEARANCE_OPTIONS = [
   { key: 'auto', label: 'Match system' },
 ];
 const FAVICON_VERSION = '20260520-27';
-const APPLE_TOUCH_ICON_BASE = '/apple-touch-icon-rg-20260520-8';
+const APPLE_TOUCH_ICON_BASE = '/apple-touch-icon-bm-20260520-8';
 const FAVICON_HREF = {
   light: {
     'favicon-32': `/favicon-32.png?v=${FAVICON_VERSION}`,

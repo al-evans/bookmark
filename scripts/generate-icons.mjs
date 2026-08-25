@@ -37,9 +37,9 @@ const targets = [
   { file: 'appicon-167x167-precomposed.png', size: 167 },
   { file: 'appicon-180x180-precomposed.png', size: 180 },
   // Unique-path Apple touch icons (iOS Add-to-Home consumes the -precomposed one)
-  { file: 'apple-touch-icon-rg-20260520-8.png', size: 180 },
-  { file: 'apple-touch-icon-rg-20260520-8-precomposed.png', size: 180 },
-  { file: 'reading-app-icon-source.png', size: 1024 },
+  { file: 'apple-touch-icon-bm-20260520-8.png', size: 180 },
+  { file: 'apple-touch-icon-bm-20260520-8-precomposed.png', size: 180 },
+  { file: 'bookmark-icon-source.png', size: 1024 },
 ];
 
 // Dark variants used by browser favicon swap (in-app icon scheme setting).
@@ -47,8 +47,8 @@ const darkTargets = [
   { file: 'favicon-32-dark.png', size: 32 },
   { file: 'icon-192-dark.png', size: 192 },
   { file: 'icon-512-dark.png', size: 512 },
-  { file: 'apple-touch-icon-rg-20260520-8-dark.png', size: 180 },
-  { file: 'apple-touch-icon-rg-20260520-8-dark-precomposed.png', size: 180 },
+  { file: 'apple-touch-icon-bm-20260520-8-dark.png', size: 180 },
+  { file: 'apple-touch-icon-bm-20260520-8-dark-precomposed.png', size: 180 },
 ];
 
 const svg = await readFile(svgPath);
