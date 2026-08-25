@@ -78,8 +78,8 @@ drawing goes stale, and the last hand-drawn preview was wrong in six ways.
 | `docs/social-preview.png` | `docs/social-preview.svg` | 2400x1260, for `og:image` |
 | `docs/social-preview-github.png` | `docs/social-preview-github.svg` | 1280x640, for Settings > Social preview |
 | `docs/readme-banner.png` | `docs/readme-banner.svg` | 2400x720, for `README.md` |
-| `docs/bookmark-demo.mp4` | see below | 1920x1080, 25 fps, 21.6 s |
-| `docs/bookmark-demo-poster.jpg` | frame 0 of the video | 1920x1080 |
+| `docs/demo/scene-1.webp` to `scene-7.webp` | see below | 780x1666, the hero demo on the landing page |
+| `docs/bookmark-demo.mp4` | see below | 1920x1080, 25 fps, 21.6 s. Only for `og:video` now |
 
 Each `.svg` holds its screenshot as a base64 `<image>`. GitHub does not load
 external files from an SVG, so a relative link shows a broken image.
@@ -108,7 +108,31 @@ external files from an SVG, so a relative link shows a broken image.
 5. Measure `getBoundingClientRect()` on each `<text>` node. Overlapping text is
    easy to miss by eye.
 
+### To rebuild the hero demo
+
+The landing page hero is HTML, not a video. It shows the same seven scenes,
+but each one is a real screenshot in a CSS phone, and the caption is text.
+
+Capture the seven screens exactly as the video section below describes, then
+resize each to 780x1666 and save it as WebP at quality 84:
+
+```py
+from PIL import Image
+Image.open("s1.png").convert("RGB").resize((780, 1666), Image.LANCZOS) \
+    .save("docs/demo/scene-1.webp", "WEBP", quality=84, method=6)
+```
+
+780x1666 is twice the 390x833 capture viewport, so the screen stays sharp on
+a 2x display. All seven come to about 317 KB, and only the first one loads
+before the visitor scrolls.
+
+The captions live in `docs/index.html` on each dot button, as `data-title`
+and `data-sub`. Keep them the same as the video slides so the two agree.
+
 ### To rebuild the demo video
+
+The video is no longer on the page. It stays in `docs/` because `og:video`
+points at it, so a social card can still play it.
 
 The video has 7 slides. Each slide shows a headline, a subtitle, a row of 7
 dots, and one phone screenshot.
