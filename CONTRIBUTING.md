@@ -115,12 +115,12 @@ the same layout, typeface, palette and copy. They were allowed to drift apart
 once, and the private one ended up hand-drawn in the wrong typeface. Generate
 both from one template so that cannot happen again.
 
-**Share the template, not the screenshots.** Both apps now show the same name in
-their header, so a screen can look interchangeable while carrying interface this
-repo has and the private one does not: the Percent and Pages toggle, the app lock
-and the setup check are all bookmark-only. A screenshot therefore still belongs
-to exactly one repo, and each repo captures its own screens from its own running
-app. Only the template travels.
+**Share the template, not the screenshots.** The public app now says Bookmark in
+its header while the private repo still carries the Reading Goals header, and the
+interfaces differ too: the Percent and Pages toggle, the app lock and the setup
+check are all bookmark-only. A screenshot therefore belongs to exactly one repo,
+and each repo captures its own screens from its own running app. Only the
+template travels.
 
 The two screens are not both taken from `docs/demo/`:
 

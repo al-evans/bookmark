@@ -21,6 +21,8 @@ const RENAMED_STORAGE_KEYS = [
   ['reading-app-icon-scheme', ICON_SCHEME_KEY],
 ];
 
+const CONFLICT_BACKUP_SUFFIX = ':reading-app-backup';
+
 // An empty list is what a first load writes before any old data is read. Treat
 // that as "nothing here" on both sides, so it cannot block the migration and
 // strand the books under the old name.
@@ -39,9 +41,14 @@ export function migrateRenamedStorageKeys() {
         continue;
       }
 
-      if (!isEmptyStoredValue(localStorage.getItem(newKey))) {
-        // Real data is already saved under the new name, so it wins. Leave the
-        // old copy alone: never delete a value that has not been moved.
+      const newValue = localStorage.getItem(newKey);
+      if (!isEmptyStoredValue(newValue)) {
+        if (oldValue !== newValue) {
+          localStorage.setItem(`${newKey}${CONFLICT_BACKUP_SUFFIX}`, oldValue);
+        }
+        // Real data is already saved under the new name, so it wins. Preserve
+        // any conflicting old copy under a backup key before retiring the source.
+        localStorage.removeItem(oldKey);
         continue;
       }
 

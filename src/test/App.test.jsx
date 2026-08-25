@@ -664,15 +664,28 @@ describe('storage keys renamed from Reading Goals to Bookmark', () => {
     expect(localStorageMock.getItem('reading-app-theme')).toBeNull();
   });
 
-  it('keeps real data already held under the new key, and does not delete what it did not move', () => {
+  it('keeps real data already held under the new key and backs up conflicting old data', () => {
     localStorageMock.setItem('reading-app-theme', 'dark');
     localStorageMock.setItem('bookmark-theme', 'light');
 
     migrateRenamedStorageKeys();
 
     expect(localStorageMock.getItem('bookmark-theme')).toBe('light');
-    // The old value was never moved, so it must survive rather than be dropped.
-    expect(localStorageMock.getItem('reading-app-theme')).toBe('dark');
+    expect(localStorageMock.getItem('bookmark-theme:reading-app-backup')).toBe('dark');
+    expect(localStorageMock.getItem('reading-app-theme')).toBeNull();
+  });
+
+  it('does not replay the old books after the new library is emptied', () => {
+    localStorageMock.setItem('reading-app-books', '[{"id":"old"}]');
+    localStorageMock.setItem('bookmark-books', '[{"id":"new"}]');
+
+    migrateRenamedStorageKeys();
+    localStorageMock.setItem('bookmark-books', '[]');
+    migrateRenamedStorageKeys();
+
+    expect(localStorageMock.getItem('bookmark-books')).toBe('[]');
+    expect(localStorageMock.getItem('bookmark-books:reading-app-backup')).toBe('[{"id":"old"}]');
+    expect(localStorageMock.getItem('reading-app-books')).toBeNull();
   });
 
   it('migrates past an empty list written by an earlier load', () => {
