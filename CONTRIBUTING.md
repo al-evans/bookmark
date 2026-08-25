@@ -96,6 +96,15 @@ external files from an SVG, so a relative link shows a broken image.
    GitHub documents for Settings > Social preview, and a 2x file was rejected
    there: GitHub kept the reference but never stored the image, so the card
    came back blank and the stored URL returned 404.
+5. Keep every important detail inside a 78 px border on `social-preview-github.png`.
+   That is the 40pt safe area on GitHub's own repository card template, and it is
+   what stops the phone being cropped. Decoration may cross it; the wordmark, the
+   text, and the phone may not. The phone still bleeds off the bottom on purpose,
+   because the part below the cut carries no information.
+6. Bump the `?v=` number on `og:image` and `twitter:image` in `docs/index.html`
+   whenever `social-preview.png` changes. LinkedIn, Slack, and X cache the image
+   against its URL, so an unchanged URL keeps serving the old picture for days.
+   Bumping the number makes it a new URL, so every scraper fetches again.
 5. Measure `getBoundingClientRect()` on each `<text>` node. Overlapping text is
    easy to miss by eye.
 
