@@ -289,6 +289,8 @@
       }
 
       .demo-dots {
+        /* Shared by the bar inset and the negative row margin below. */
+        --dot-inset: 14px;
         display: flex;
       }
 
@@ -296,7 +298,6 @@
          left inset instead of centred, so the idle and active widths both grow
          rightward from the same x-coordinate. */
       .demo-dot {
-        --dot-inset: 14px;
         align-items: center;
         background: none;
         border: 0;
@@ -345,9 +346,12 @@
 
       /* Seven 48px targets no longer fit, so shrink the idle width only. */
       @media (max-width: 379px) {
-        .demo-dot {
+        .demo-dots {
           /* Keeps the widest (30px) bar inside the narrower target. */
           --dot-inset: 5px;
+        }
+
+        .demo-dot {
           width: 40px;
         }
       }
@@ -365,10 +369,10 @@
           justify-content: flex-start;
         }
 
-        /* Each dot is a 48px target around a 20px bar, so pull the row back
-           by the 14px inset to line the first bar up with the text. */
+        /* The bars sit at a fixed inset inside each target, so pull the row
+           back by that inset to line the first bar up with the text. */
         .demo-dots {
-          margin-left: -14px;
+          margin-left: calc(-1 * var(--dot-inset));
         }
       }
 
