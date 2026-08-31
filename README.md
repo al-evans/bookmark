@@ -6,7 +6,7 @@
 
 Bookmark is a self-hosted reading tracker built with React + Vite for Vercel.
 Log books, track progress, see finished stats, and optionally bring your own
-AI key for book search and reading tips.
+AI key for AI search suggestions and reading tips (book summaries have a built-in fallback).
 
 **Own your data.** No hosted service, no shared AI key, no required paid plan.
 
@@ -209,9 +209,14 @@ at a live app that uses your personal Vercel environment variables.
 ## Bring your own AI
 
 AI features are **entirely optional**. This repo does not ship, proxy, or share
-the maintainer's AI key. Without your own key the app works normally — Open
-Library still powers book search, and the AI endpoints return a clean `503` that
-the UI handles gracefully.
+the maintainer's AI key. Without your own key the app still works normally:
+
+- Open Library still powers standard book search
+- `/api/enrich-book` still generates a fallback recommendation from title/author
+- AI-only search suggestions (`/api/ai-book-search`) need a configured provider key
+
+When an AI key is missing, AI-only endpoints return a clean `503` that the UI
+handles gracefully.
 
 Set `AI_PROVIDER` and `AI_API_KEY` in your own Vercel project to turn AI on:
 
