@@ -214,8 +214,8 @@ the maintainer's AI key. Without your own key the app still works normally:
 
 - Open Library still powers standard book search
 - `/api/enrich-book` still generates a fallback recommendation from title/author
-- `/api/ai-book-search` still returns curated matches for a few known queries,
-  and otherwise needs a configured provider key
+- `/api/ai-book-search` still returns curated matches for a small set of
+  built-in queries, and otherwise needs a configured provider key
 
 When an AI key is missing and no fallback applies, the AI endpoints return a
 clean `503` that the UI handles gracefully.
