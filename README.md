@@ -5,8 +5,9 @@
 </a>
 
 Bookmark is a self-hosted reading tracker built with React + Vite for Vercel.
-Log books, track progress, see finished stats, and optionally bring your own
-AI key for book search and reading tips.
+Log books, track progress, see finished stats, and optionally add your own AI
+key for expanded book search, title-specific recommendations, and personalized
+reading tips.
 
 **Own your data.** No hosted service, no shared AI key, no required paid plan.
 
@@ -28,7 +29,7 @@ AI key for book search and reading tips.
 |---|---|
 | **Books I've Read** | Everything you've finished, grouped by month and year |
 | **Want to Read** | A queue of what's next |
-| **Add books** | Manually, via Open Library search, or via AI search fallback |
+| **Add books** | Manually, via Open Library search, or via optional AI search |
 | **Progress tracking** | Log by percentage or by page number, and keep the full history |
 | **Reading speed estimate** | Days remaining based on your logged pace |
 | **Daily push reminder** | Vercel Cron notifies your phone when you haven't logged today |
@@ -209,9 +210,17 @@ at a live app that uses your personal Vercel environment variables.
 ## Bring your own AI
 
 AI features are **entirely optional**. This repo does not ship, proxy, or share
-the maintainer's AI key. Without your own key the app works normally — Open
-Library still powers book search, and the AI endpoints return a clean `503` that
-the UI handles gracefully.
+the maintainer's AI key. Without your own key:
+
+- Open Library powers standard book search and supplies book facts
+- `/api/enrich-book` adds a generic recommendation built from the book's title
+  and author
+- expanded search, title-specific recommendations, and personalized reading
+  tips stay off
+
+`/api/ai-book-search` has one built-in result for `Yesteryear` before it checks
+for an AI key. Other AI-search queries return a clean `503` when no provider is
+configured, and the UI handles that response normally.
 
 Set `AI_PROVIDER` and `AI_API_KEY` in your own Vercel project to turn AI on:
 
