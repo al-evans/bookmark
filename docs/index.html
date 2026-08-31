@@ -214,10 +214,10 @@
           grid-template-areas:
             "copy     phone"
             "controls phone";
-          grid-template-columns: minmax(0, 34ch) auto;
+          grid-template-columns: minmax(0, 52ch) auto;
           gap: calc(var(--space) * 2) calc(var(--space) * 3);
           /* Size both tracks to their content and centre the pair, so the
-             copy column cannot stretch and strand the phone at the edge. */
+             copy column holds all controls without stranding the phone. */
           justify-content: center;
           justify-items: start;
           text-align: left;
@@ -337,22 +337,23 @@
         font-weight: 700;
         min-height: 48px;
         min-width: 48px;
-        padding: 0 18px;
+        padding: 0 14px;
       }
 
       .demo-toggle:hover {
         background: var(--blue-soft);
       }
 
-      /* Seven 48px targets no longer fit, so shrink the idle width only. */
-      @media (max-width: 379px) {
-        .demo-dots {
-          /* Keeps the widest (30px) bar inside the narrower target. */
-          --dot-inset: 5px;
+      /* Keep every 48px target visible on 320px-wide phones. */
+      @media (max-width: 359px) {
+        .demo-controls {
+          flex-direction: column;
         }
 
-        .demo-dot {
-          width: 40px;
+        .demo-dots {
+          flex-wrap: wrap;
+          justify-content: center;
+          width: 192px;
         }
       }
 
@@ -747,9 +748,9 @@
                     class="demo-dot"
                     type="button"
                     aria-current="false"
-                    aria-label="Show Keep a want-to-read list"
-                    data-title="Keep a want-to-read list"
-                    data-sub="Without AI: generic recommendation. With AI: title-specific recommendation."
+                    aria-label="Show Plan your next read"
+                    data-title="Plan your next read"
+                    data-sub="Save books for later. Add AI for title-specific recommendations."
                   ></button>
                   <button
                     class="demo-dot"
