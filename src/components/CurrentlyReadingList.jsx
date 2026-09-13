@@ -322,20 +322,18 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
                   </button>
                 )}
 
-                {currentPct < 100 && (
-                  <button
-                    type="button"
-                    className="action-drawer__item"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      onMarkRead(book.id);
-                    }}
-                    aria-label={`Mark "${book.title}" as finished`}
-                  >
-                    <Check size={16} aria-hidden="true" />
-                    <span>Finished</span>
-                  </button>
-                )}
+                <button
+                  type="button"
+                  className="action-drawer__item"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onMarkRead(book.id);
+                  }}
+                  aria-label={`Mark "${book.title}" as finished`}
+                >
+                  <Check size={16} aria-hidden="true" />
+                  <span>Finished</span>
+                </button>
                 <button
                   type="button"
                   className="action-drawer__item action-drawer__item--danger"

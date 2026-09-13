@@ -566,6 +566,26 @@ describe('App', () => {
     expect(screen.getByText('Dune')).toBeInTheDocument();
   });
 
+  it('keeps the finished action available after logging 100% progress', async () => {
+    await renderApp();
+    fireEvent.click(screen.getByRole('button', { name: /Add a new book/i }));
+    fireEvent.change(screen.getByLabelText(/Title \*/i), { target: { value: 'Dune' } });
+    fireEvent.change(screen.getByLabelText(/Status/i), { target: { value: 'currently-reading' } });
+    fireEvent.click(screen.getByRole('button', { name: /Add Book/i }));
+
+    fireEvent.click(screen.getByRole('button', { name: /Open log entry for "Dune"/i }));
+    fireEvent.change(screen.getByLabelText(/Log current reading percentage for "Dune"/i), {
+      target: { value: '100' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Save Log/i }));
+
+    fireEvent.click(screen.getByRole('button', { name: /More actions for "Dune"/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Mark "Dune" as finished/i }));
+
+    expect(screen.getByRole('tab', { name: /Finished/i })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByText('Dune')).toBeInTheDocument();
+  });
+
   it('shows validation error when title is empty', async () => {
     await renderApp();
     fireEvent.click(screen.getByRole('button', { name: /Add a new book/i }));
