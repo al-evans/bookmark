@@ -8,6 +8,7 @@ import {
   pagesToPercent,
   percentToPages,
   resolveProgressUnit,
+  sortProgressLogs,
 } from '../utils/progress';
 import { confirmDeleteBook } from '../utils/deleteConfirmation';
 import {
@@ -47,7 +48,7 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
   const unit = resolveProgressUnit(book);
   const isPageUnit = unit === 'pages' && totalPages !== null;
   const logCount = book.progressLog?.length ?? 0;
-  const historyEntries = [...(book.progressLog ?? [])].reverse();
+  const historyEntries = sortProgressLogs(book.progressLog ?? []).reverse();
   const visibleHistoryEntries = isHistoryExpanded
     ? historyEntries
     : historyEntries.slice(0, INITIAL_HISTORY_ENTRY_COUNT);

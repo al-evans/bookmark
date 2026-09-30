@@ -62,6 +62,32 @@ describe('CurrentlyReadingList progress history', () => {
     expect(within(dialog).getAllByRole('listitem')).toHaveLength(5);
   });
 
+  it('chooses the five newest entries by date when history is out of order', () => {
+    const book = createBook('first', 'First book', 7);
+    book.progressLog = [
+      { date: '2026-09-01', currentPercent: 10 },
+      { date: '2026-09-07', currentPercent: 70 },
+      { date: '2026-09-02', currentPercent: 20 },
+      { date: '2026-09-06', currentPercent: 60 },
+      { date: '2026-09-03', currentPercent: 30 },
+      { date: '2026-09-05', currentPercent: 50 },
+      { date: '2026-09-04', currentPercent: 40 },
+    ];
+    renderList([book]);
+    fireEvent.click(screen.getByRole('button', { name: 'View progress history for "First book"' }));
+
+    const dialog = screen.getByRole('dialog', { name: 'Progress history for "First book"' });
+    const entries = within(dialog).getAllByRole('listitem');
+    expect(entries).toHaveLength(5);
+    expect(entries.map((entry) => entry.textContent)).toEqual([
+      expect.stringContaining('70%'),
+      expect.stringContaining('60%'),
+      expect.stringContaining('50%'),
+      expect.stringContaining('40%'),
+      expect.stringContaining('30%'),
+    ]);
+  });
+
   it('shows the full history without a view-all control when it has five or fewer entries', () => {
     renderList([createBook('first', 'First book', 5)]);
     fireEvent.click(screen.getByRole('button', { name: 'View progress history for "First book"' }));
