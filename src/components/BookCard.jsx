@@ -28,96 +28,90 @@ export default function BookCard({ book, onMarkRead, onStartReading, onDelete, o
         )}
       </div>
       <div className="book-actions book-actions--top">
+        <button
+          type="button"
+          className="btn-quiet-icon"
+          aria-label={`More actions for "${book.title}"`}
+          title="More actions"
+          onClick={() => setIsMenuOpen(true)}
+        >
+          <MoreVertical size={18} aria-hidden="true" />
+          <span className="sr-only">More actions</span>
+        </button>
+      </div>
+      {isMenuOpen && (
         <>
           <button
             type="button"
-            className="btn-quiet-icon"
-            aria-label={`More actions for "${book.title}"`}
-            title="More actions"
-            onClick={() => setIsMenuOpen(true)}
-          >
-            <MoreVertical size={18} aria-hidden="true" />
-            <span className="sr-only">More actions</span>
-          </button>
-
-          {isMenuOpen && (
-            <>
+            className="action-drawer__scrim"
+            aria-label={`Close actions for "${book.title}"`}
+            onClick={() => setIsMenuOpen(false)}
+          />
+          <section className="action-drawer" role="dialog" aria-modal="true" aria-label={`Actions for "${book.title}"`}>
+            <div className="action-drawer__sheet">
+              <div className="action-drawer__handle" aria-hidden="true" />
+              <p className="action-drawer__title">{book.title}</p>
+              {book.status === 'want-to-read' && onStartReading && (
+                <button
+                  type="button"
+                  className="action-drawer__item"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onStartReading(book.id);
+                  }}
+                  aria-label={`Start reading "${book.title}"`}
+                >
+                  <span aria-hidden="true">▶</span>
+                  <span>Start reading</span>
+                </button>
+              )}
+              {book.status === 'want-to-read' && onMarkRead && (
+                <button
+                  type="button"
+                  className="action-drawer__item"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onMarkRead(book.id);
+                  }}
+                  aria-label={`Mark "${book.title}" as read`}
+                >
+                  <span aria-hidden="true">✓</span>
+                  <span>Mark read</span>
+                </button>
+              )}
+              {onEditPageCount && (
+                <button
+                  type="button"
+                  className="action-drawer__item"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onEditPageCount(book.id);
+                  }}
+                  aria-label={`Edit details for "${book.title}"`}
+                >
+                  <Pencil size={16} aria-hidden="true" />
+                  <span>Edit</span>
+                </button>
+              )}
               <button
                 type="button"
-                className="action-drawer__scrim"
-                aria-label={`Close actions for "${book.title}"`}
-                onClick={() => setIsMenuOpen(false)}
-              />
-              <section className="action-drawer" role="dialog" aria-modal="true" aria-label={`Actions for "${book.title}"`}>
-                <div className="action-drawer__sheet">
-                  <div className="action-drawer__handle" aria-hidden="true" />
-                  <p className="action-drawer__title">{book.title}</p>
-                  {book.status === 'want-to-read' && onStartReading && (
-                    <button
-                      type="button"
-                      className="action-drawer__item"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        onStartReading(book.id);
-                      }}
-                      aria-label={`Start reading "${book.title}"`}
-                    >
-                      <span aria-hidden="true">▶</span>
-                      <span>Start reading</span>
-                    </button>
-                  )}
-                  {book.status === 'want-to-read' && onMarkRead && (
-                    <button
-                      type="button"
-                      className="action-drawer__item"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        onMarkRead(book.id);
-                      }}
-                      aria-label={`Mark "${book.title}" as read`}
-                    >
-                      <span aria-hidden="true">✓</span>
-                      <span>Mark read</span>
-                    </button>
-                  )}
-                  {onEditPageCount && (
-                    <button
-                      type="button"
-                      className="action-drawer__item"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        onEditPageCount(book.id);
-                      }}
-                      aria-label={`Edit details for "${book.title}"`}
-                    >
-                      <Pencil size={16} aria-hidden="true" />
-                      <span>Edit</span>
-                    </button>
-                  )}
-                  {book.status === 'want-to-read' && onMarkRead && (
-                    null
-                  )}
-                  <button
-                    type="button"
-                    className="action-drawer__item action-drawer__item--danger"
-                    onClick={() => {
-                      const confirmed = confirmDeleteBook(book.title);
-                      if (confirmed) {
-                        setIsMenuOpen(false);
-                        onDelete(book.id);
-                      }
-                    }}
-                    aria-label={`Delete "${book.title}"`}
-                  >
-                    <Trash2 size={16} aria-hidden="true" />
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </section>
-            </>
-          )}
+                className="action-drawer__item action-drawer__item--danger"
+                onClick={() => {
+                  const confirmed = confirmDeleteBook(book.title);
+                  if (confirmed) {
+                    setIsMenuOpen(false);
+                    onDelete(book.id);
+                  }
+                }}
+                aria-label={`Delete "${book.title}"`}
+              >
+                <Trash2 size={16} aria-hidden="true" />
+                <span>Delete</span>
+              </button>
+            </div>
+          </section>
         </>
-      </div>
+      )}
     </div>
   );
 }

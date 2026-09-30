@@ -18,6 +18,7 @@ import {
 } from '../utils/timezone';
 
 const MIN_LOGS_FOR_ESTIMATE = 3;
+const INITIAL_HISTORY_ENTRY_COUNT = 5;
 
 function formatPagesPerDay(pagesPerDay) {
   const rounded = Math.round(pagesPerDay * 10) / 10;
@@ -36,6 +37,7 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isHistoryExpanded, setIsHistoryExpanded] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogEntryOpen, setIsLogEntryOpen] = useState(false);
 
@@ -45,6 +47,10 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
   const unit = resolveProgressUnit(book);
   const isPageUnit = unit === 'pages' && totalPages !== null;
   const logCount = book.progressLog?.length ?? 0;
+  const historyEntries = [...(book.progressLog ?? [])].reverse();
+  const visibleHistoryEntries = isHistoryExpanded
+    ? historyEntries
+    : historyEntries.slice(0, INITIAL_HISTORY_ENTRY_COUNT);
   const currentPct = getCurrentPercent(book.progressLog, book.currentPercent ?? 0);
   const displayPct = Math.round(currentPct);
   const currentPage = totalPages !== null ? percentToPages(currentPct, totalPages) : null;
@@ -110,6 +116,7 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
     setInputValue('');
     setError('');
     setIsLogEntryOpen(false);
+    setIsHistoryExpanded(false);
     setIsHistoryOpen(true);
   };
 
@@ -244,7 +251,9 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
             title="Progress history"
             onClick={() => {
               setIsMenuOpen(false);
-              setIsHistoryOpen((open) => !open);
+              const isOpening = !isHistoryOpen;
+              setIsHistoryOpen(isOpening);
+              if (isOpening) setIsHistoryExpanded(false);
             }}
           >
             <Clock3 size={17} aria-hidden="true" />
@@ -262,98 +271,108 @@ function BookProgressCard({ book, onLogProgress, onSetProgressUnit, onMarkRead, 
           <MoreVertical size={18} aria-hidden="true" />
           <span className="sr-only">More actions</span>
         </button>
+      </div>
 
-        {isHistoryOpen && (
-          <>
-            <button
-              type="button"
-              className="action-drawer__scrim"
-              aria-label={`Close progress history for "${book.title}"`}
-              onClick={() => setIsHistoryOpen(false)}
-            />
-            <section className="action-drawer" role="dialog" aria-modal="true" aria-label={`Progress history for "${book.title}"`}>
-              <div className="action-drawer__sheet">
-                <div className="action-drawer__handle" aria-hidden="true" />
-                <p className="action-drawer__title">Progress History</p>
-                <ul className="history-drawer__list" aria-label={`Progress history entries for "${book.title}"`}>
-                  {[...book.progressLog].reverse().map((entry, i) => {
-                    const dateLabel = formatPtFriendlyDateKey(entry.date) || formatPtFriendlyDate(entry.date) || entry.date;
-                    const entryPct = Math.round(Number(entry.currentPercent) || 0);
-                    const entryLabel = isPageUnit
-                      ? `Page ${percentToPages(Number(entry.currentPercent) || 0, totalPages)}`
-                      : `${entryPct}%`;
-                    return (
-                      <li key={i} className="history-drawer__item">
-                        <span className="history-drawer__date">{dateLabel}</span>
-                        <span className="history-drawer__percent">{entryLabel}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </section>
-          </>
-        )}
+      {isHistoryOpen && (
+        <>
+          <button
+            type="button"
+            className="action-drawer__scrim"
+            aria-label={`Close progress history for "${book.title}"`}
+            onClick={() => setIsHistoryOpen(false)}
+          />
+          <section className="action-drawer" role="dialog" aria-modal="true" aria-label={`Progress history for "${book.title}"`}>
+            <div className="action-drawer__sheet">
+              <div className="action-drawer__handle" aria-hidden="true" />
+              <p className="action-drawer__title">Progress History</p>
+              <ul className="history-drawer__list" aria-label={`Progress history entries for "${book.title}"`}>
+                {visibleHistoryEntries.map((entry, i) => {
+                  const dateLabel = formatPtFriendlyDateKey(entry.date) || formatPtFriendlyDate(entry.date) || entry.date;
+                  const entryPct = Math.round(Number(entry.currentPercent) || 0);
+                  const entryLabel = isPageUnit
+                    ? `Page ${percentToPages(Number(entry.currentPercent) || 0, totalPages)}`
+                    : `${entryPct}%`;
+                  return (
+                    <li key={i} className="history-drawer__item">
+                      <span className="history-drawer__date">{dateLabel}</span>
+                      <span className="history-drawer__percent">{entryLabel}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+              {historyEntries.length > INITIAL_HISTORY_ENTRY_COUNT && (
+                <button
+                  type="button"
+                  className="action-drawer__item history-drawer__toggle"
+                  aria-expanded={isHistoryExpanded}
+                  onClick={() => setIsHistoryExpanded((expanded) => !expanded)}
+                >
+                  {isHistoryExpanded ? 'Show less' : `View all ${historyEntries.length} entries`}
+                </button>
+              )}
+            </div>
+          </section>
+        </>
+      )}
 
-        {isMenuOpen && (
-          <>
-            <button
-              type="button"
-              className="action-drawer__scrim"
-              aria-label={`Close actions for "${book.title}"`}
-              onClick={() => setIsMenuOpen(false)}
-            />
-            <section className="action-drawer" role="dialog" aria-modal="true" aria-label={`Actions for "${book.title}"`}>
-              <div className="action-drawer__sheet">
-                <div className="action-drawer__handle" aria-hidden="true" />
-                <p className="action-drawer__title">{book.title}</p>
-                {onEditPageCount && (
-                  <button
-                    type="button"
-                    className="action-drawer__item"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      onEditPageCount(book.id);
-                    }}
-                    aria-label={`Edit details for "${book.title}"`}
-                  >
-                    <Pencil size={16} aria-hidden="true" />
-                    <span>Edit</span>
-                  </button>
-                )}
-
+      {isMenuOpen && (
+        <>
+          <button
+            type="button"
+            className="action-drawer__scrim"
+            aria-label={`Close actions for "${book.title}"`}
+            onClick={() => setIsMenuOpen(false)}
+          />
+          <section className="action-drawer" role="dialog" aria-modal="true" aria-label={`Actions for "${book.title}"`}>
+            <div className="action-drawer__sheet">
+              <div className="action-drawer__handle" aria-hidden="true" />
+              <p className="action-drawer__title">{book.title}</p>
+              {onEditPageCount && (
                 <button
                   type="button"
                   className="action-drawer__item"
                   onClick={() => {
                     setIsMenuOpen(false);
-                    onMarkRead(book.id);
+                    onEditPageCount(book.id);
                   }}
-                  aria-label={`Mark "${book.title}" as finished`}
+                  aria-label={`Edit details for "${book.title}"`}
                 >
-                  <Check size={16} aria-hidden="true" />
-                  <span>Finished</span>
+                  <Pencil size={16} aria-hidden="true" />
+                  <span>Edit</span>
                 </button>
-                <button
-                  type="button"
-                  className="action-drawer__item action-drawer__item--danger"
-                  onClick={() => {
-                    const confirmed = confirmDeleteBook(book.title, { clearProgress: true });
-                    if (confirmed) {
-                      setIsMenuOpen(false);
-                      onDelete(book.id);
-                    }
-                  }}
-                  aria-label={`Delete "${book.title}" from your library`}
-                >
-                  <Trash2 size={16} aria-hidden="true" />
-                  <span>Delete</span>
-                </button>
-              </div>
-            </section>
-          </>
-        )}
-      </div>
+              )}
+
+              <button
+                type="button"
+                className="action-drawer__item"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  onMarkRead(book.id);
+                }}
+                aria-label={`Mark "${book.title}" as finished`}
+              >
+                <Check size={16} aria-hidden="true" />
+                <span>Finished</span>
+              </button>
+              <button
+                type="button"
+                className="action-drawer__item action-drawer__item--danger"
+                onClick={() => {
+                  const confirmed = confirmDeleteBook(book.title, { clearProgress: true });
+                  if (confirmed) {
+                    setIsMenuOpen(false);
+                    onDelete(book.id);
+                  }
+                }}
+                aria-label={`Delete "${book.title}" from your library`}
+              >
+                <Trash2 size={16} aria-hidden="true" />
+                <span>Delete</span>
+              </button>
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 }

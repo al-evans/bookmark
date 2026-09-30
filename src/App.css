@@ -1078,6 +1078,11 @@ body {
   font-weight: 700;
 }
 
+.history-drawer__toggle {
+  justify-content: center;
+  color: var(--blue);
+}
+
 .settings-group {
   margin: 1rem 0 1.1rem;
   padding: 0.75rem;
@@ -2346,6 +2351,10 @@ form select:focus {
 [data-theme="dark"] .action-drawer__title,
 [data-theme="dark"] .action-drawer__item {
   color: #cbd5e1;
+}
+
+[data-theme="dark"] .action-drawer__item.history-drawer__toggle {
+  color: #60a5fa;
 }
 
 [data-theme="dark"] .action-drawer__item:hover,
